@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PLC Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>PLC Dashboard</h1>
+
+<div class="card">
+Pressure: <span id="pressure">--</span>
+</div>
+
+<div class="card">
+Temperature: <span id="temperature">--</span>
+</div>
+
+<div class="card">
+Speed RPM: <span id="speedRPM">--</span>
+</div>
+
+<div class="card">
+Motor: <span id="motorRun">--</span>
+</div>
+
+<div class="card">
+Alarm: <span id="alarmActive">--</span>
+</div>
+
+<h2>History</h2>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Pressure</th>
+<th>Temp</th>
+<th>RPM</th>
+<th>Motor</th>
+<th>Alarm</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody id="historyTable">
+</tbody>
+</table>
+
+<h2>Trends</h2>
+
+<canvas id="pressureChart"></canvas>
+
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

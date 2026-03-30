@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRN Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e1012;--surface:#181a1e;--surface2:#1f2227;--surface3:#272b32;
+  --accent:#e8453c;--accent2:#ff7066;--blue:#3b82f6;
+  --text:#e8eaed;--text-dim:#7a808c;--border:#272b32;
+  --green:#22c55e;--red:#ef4444;--yellow:#eab308;--card:#181a1e;
+}
+html,body{height:100%;overflow:hidden}
+body{background:#0a0b0d;color:var(--text);font-family:'Exo 2',sans-serif;
+  display:flex;flex-direction:column;align-items:center;padding:10px;height:100vh}
+
+/* OUTER */
+.outer{width:100%;max-width:1200px;height:calc(100vh - 20px);border:1.5px solid var(--blue);
+  border-radius:6px;background:var(--bg);display:flex;flex-direction:column;
+  overflow:hidden;position:relative;box-shadow:0 0 40px rgba(59,130,246,.08)}
+.outer::before,.outer::after{content:'';position:absolute;width:14px;height:14px;border-style:solid;z-index:2}
+.outer::before{top:-1px;right:-1px;border-width:2px 2px 0 0;border-color:var(--accent);border-radius:0 6px 0 0}
+.outer::after{bottom:-1px;left:-1px;border-width:0 0 2px 2px;border-color:var(--accent);border-radius:0 0 0 6px}
+
+.page-label{position:fixed;top:14px;left:18px;font-family:'Rajdhani',sans-serif;font-size:11px;
+  font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);z-index:200}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 24px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{display:flex;flex-direction:column;align-items:center;gap:1px}
+.logo svg{width:28px;height:24px}
+.logo-text{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;color:var(--text-dim)}
+
+/* NAV */
+nav{display:flex;gap:2px;background:rgba(255,255,255,.03);border-radius:50px;
+  padding:3px;border:1px solid var(--border);position:relative}
+.nav-pill{position:absolute;top:3px;height:calc(100% - 6px);background:var(--accent);border-radius:50px;
+  transition:left .38s cubic-bezier(.34,1.56,.64,1),width .38s cubic-bezier(.34,1.56,.64,1);
+  z-index:0;box-shadow:0 0 18px rgba(232,69,60,.35)}
+.nav-btn{position:relative;z-index:1;background:none;border:none;cursor:pointer;padding:6px 16px;
+  border-radius:50px;font-family:'Exo 2',sans-serif;font-size:12.5px;font-weight:500;
+  color:var(--text-dim);transition:color .2s;white-space:nowrap;letter-spacing:.4px}
+.nav-btn.active{color:#fff;font-weight:600}
+
+/* DATE NAV */
+.date-nav{display:flex;flex-direction:column;align-items:center;padding:10px 0 8px;gap:6px;
+  flex-shrink:0;border-bottom:1px solid var(--border)}
+.date-month{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;letter-spacing:1px}
+.date-week{display:flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-dim)}
+.arrow{background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:14px;
+  padding:3px 7px;border-radius:4px;transition:color .2s,background .2s}
+.arrow:hover{color:var(--text);background:var(--surface2)}
+.date-day{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:26px}
+.date-day .dl{font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.date-day .dn{width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;font-size:13px;font-weight:600;transition:background .2s,color .2s}
+.date-day.selected .dn{background:var(--accent);color:#fff;box-shadow:0 0 10px rgba(232,69,60,.4)}
+.date-day:not(.selected):hover .dn{background:var(--surface2);color:var(--text)}
+.date-day:not(.selected){color:var(--text-dim)}
+
+/* MAIN */
+main{flex:1;overflow-y:auto;padding:12px 20px 20px;scrollbar-width:thin;scrollbar-color:var(--surface3) transparent}
+main::-webkit-scrollbar{width:4px}
+main::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
+
+/* PAGES */
+.page{display:none;animation:fadeUp .28s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── DASHBOARD ── */
+.db-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.robot-card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px 14px;display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s,opacity .3s}
+.robot-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s}
+.robot-card:hover::before{opacity:1}
+.robot-card:hover{border-color:var(--surface3);box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.robot-card.stopped{border-color:rgba(239,68,68,.35);opacity:.72}
+.robot-card.stopped::before{background:linear-gradient(90deg,transparent,var(--red),transparent);opacity:.5}
+.rc-inner{display:flex;gap:14px;align-items:flex-start}
+.ri svg{width:50px;height:50px}
+.rc-info{flex:1}
+.rc-stat{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-dim);line-height:1.8}
+.rc-stat b{color:var(--text);font-weight:500}
+.rc-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;margin-top:3px}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
+.status-dot.on{background:var(--green);box-shadow:0 0 6px var(--green);animation:pd 2s infinite}
+.status-dot.off{background:var(--red);box-shadow:0 0 6px var(--red)}
+@keyframes pd{0%,100%{opacity:1}50%{opacity:.4}}
+.sensors-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;transition:border-color .2s}
+.sensors-card:hover{border-color:var(--surface3)}
+.sc-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;margin-bottom:12px;text-align:center}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 20px}
+.sc-item{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-dim)}
+.sc-item b{color:var(--text);font-weight:500}
+.sc-bar{width:100%;height:2px;background:var(--surface3);border-radius:1px;margin-top:12px;overflow:hidden}
+.sc-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:1px;transition:width 1s ease}
+
+/* ── LIVE DATA ── */
+.live-list{display:flex;flex-direction:column;gap:10px}
+.live-card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  display:flex;overflow:hidden;height:112px;transition:border-color .2s}
+.live-card:hover{border-color:var(--surface3)}
+.lc-left{width:128px;min-width:128px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;padding:10px;border-right:1px solid var(--border);background:var(--surface)}
+.lc-left svg{width:44px;height:44px}
+.lc-label{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:.8px;text-align:center}
+.lc-right{flex:1;padding:7px 12px 6px;display:flex;flex-direction:column;gap:4px}
+.lc-top{display:flex;justify-content:space-between;align-items:center}
+.lc-source{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim)}
+.lc-val-wrap{display:flex;align-items:baseline;gap:3px}
+.lc-val{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;transition:color .3s}
+.lc-unit{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim)}
+.lc-canvas-wrap{flex:1;position:relative;min-height:0}
+.lc-canvas-wrap canvas{width:100%!important;height:100%!important}
+
+/* ── CONTROL ── */
+.ctrl-panel{background:var(--surface2);border:1px solid var(--border);border-radius:12px;
+  padding:26px 40px;margin-top:8px;max-width:520px;margin-left:auto;margin-right:auto}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:13.5px;font-weight:500;color:var(--text-dim);letter-spacing:.3px}
+.toggle{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.t-track{position:absolute;inset:0;background:var(--surface3);border-radius:12px;
+  transition:background .25s;border:1px solid rgba(255,255,255,.06)}
+.t-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
+  background:#4a5060;box-shadow:0 1px 4px rgba(0,0,0,.5);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .25s}
+.toggle input:checked ~ .t-track{background:var(--accent);border-color:var(--accent)}
+.toggle input:checked ~ .t-thumb{transform:translateX(20px);background:#fff;box-shadow:0 1px 6px rgba(232,69,60,.5)}
+.post-flash{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--green);
+  opacity:0;transition:opacity .3s;margin-right:8px;letter-spacing:.5px}
+.post-flash.show{opacity:1}
+
+/* ── ALARMS ── */
+.alarms-list{display:flex;flex-direction:column;gap:10px}
+.alarm-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  display:flex;overflow:hidden;min-height:100px}
+.al-label{width:108px;min-width:108px;background:var(--surface3);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--text-dim);text-align:center;padding:8px;border-right:1px solid var(--border);gap:7px}
+.al-dot{width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 6px var(--green);animation:pd 2.5s infinite;transition:background .3s,box-shadow .3s}
+.al-dot.error{background:var(--red);box-shadow:0 0 8px var(--red);animation:none}
+.al-dot.warn{background:var(--yellow);box-shadow:0 0 6px var(--yellow);animation:none}
+.al-content{flex:1;padding:8px 12px;overflow-y:auto;max-height:140px;
+  scrollbar-width:thin;scrollbar-color:var(--surface3) transparent}
+.al-content::-webkit-scrollbar{width:3px}
+.al-content::-webkit-scrollbar-thumb{background:var(--surface3)}
+.alarm-entry{font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;align-items:flex-start}
+.alarm-entry:last-child{border-bottom:none}
+.ae-ts{color:var(--text-dim);white-space:nowrap;flex-shrink:0}
+.ae-msg{color:var(--text)}
+.ae-msg.err{color:var(--red)}
+.ae-msg.warn{color:var(--yellow)}
+.ae-msg.ok{color:var(--green)}
+
+/* ── SETTINGS ── */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.settings-card{background:var(--surface3);border:1px solid rgba(255,255,255,.05);
+  border-radius:10px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start;position:relative;overflow:hidden}
+.settings-card::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.02) 0%,transparent 60%);pointer-events:none}
+.s-info .stat{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,.45);line-height:1.8}
+.s-info .stat b{color:rgba(255,255,255,.78)}
+.s-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;color:var(--accent);margin-top:3px}
+.settings-sensors{background:var(--surface3);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:16px 20px}
+.ss-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--accent);
+  letter-spacing:2px;margin-bottom:12px;text-align:center}
+.ss-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 20px}
+.ss-item{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,.4)}
+.ss-item b{color:rgba(255,255,255,.75)}
+</style>
+</head>
+<body>
+
+<div class="page-label" id="pageLabel">Dashboard</div>
+
+<div class="outer">
+  <header>
+    <div class="logo">
+      <svg viewBox="0 0 32 28" fill="none"><path d="M16 2 L30 26 L2 26 Z" stroke="#e8453c" stroke-width="2.5" fill="none" stroke-linejoin="round"/><circle cx="16" cy="19" r="2.5" fill="#e8453c"/></svg>
+      <span class="logo-text">TRN</span>
+    </div>
+    <nav id="nav">
+      <div class="nav-pill" id="navPill"></div>
+      <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+      <button class="nav-btn" data-page="livedata">Live Data</button>
+      <button class="nav-btn" data-page="control">Control</button>
+      <button class="nav-btn" data-page="alarms">Alarms</button>
+      <button class="nav-btn" data-page="settings">Settings</button>
+    </nav>
+    <div style="width:52px"></div>
+  </header>
+
+  <div class="date-nav" id="dateNav">
+    <div class="date-month">January 2025</div>
+    <div class="date-week">
+      <button class="arrow">&lt;</button>
+      <div class="date-day selected"><span class="dl">Mon</span><span class="dn">5</span></div>
+      <div class="date-day"><span class="dl">Tue</span><span class="dn">6</span></div>
+      <div class="date-day"><span class="dl">Wed</span><span class="dn">7</span></div>
+      <div class="date-day"><span class="dl">Thu</span><span class="dn">8</span></div>
+      <div class="date-day"><span class="dl">Fri</span><span class="dn">9</span></div>
+      <div class="date-day"><span class="dl">Sat</span><span class="dn">10</span></div>
+      <div class="date-day"><span class="dl">Sun</span><span class="dn">11</span></div>
+      <button class="arrow">&gt;</button>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="db-grid">
+        <div class="robot-card stopped" id="card-loading">
+          <div class="rc-inner">
+            <div class="ri"><svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><line x1="15" y1="39.5" x2="15" y2="46" stroke="white" stroke-width="1.8"/><line x1="35" y1="39.5" x2="35" y2="46" stroke="white" stroke-width="1.8"/><rect x="9" y="45" width="12" height="2.5" rx="1.25" fill="white"/><rect x="29" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg></div>
+            <div class="rc-info">
+              <div class="rc-stat"><span class="status-dot off" id="dot-loading"></span>Status: <b id="status-loading">Stopped</b></div>
+              <div class="rc-stat">Temperature: <b id="temp-loading">70.0°C</b></div>
+              <div class="rc-stat">Velocity: <b id="vel-loading">75.0 RPM</b></div>
+              <div class="rc-name">Loading</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="robot-card stopped" id="card-unloadR">
+          <div class="rc-inner">
+            <div class="ri"><svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><line x1="35" y1="39.5" x2="35" y2="46" stroke="white" stroke-width="1.8"/><rect x="29" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg></div>
+            <div class="rc-info">
+              <div class="rc-stat"><span class="status-dot off" id="dot-unloadR"></span>Status: <b id="status-unloadR">Stopped</b></div>
+              <div class="rc-stat">Temperature: <b id="temp-unloadR">70.0°C</b></div>
+              <div class="rc-stat">Velocity: <b id="vel-unloadR">75.0 RPM</b></div>
+              <div class="rc-name">Unloading Right</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="robot-card stopped" id="card-unloadL">
+          <div class="rc-inner">
+            <div class="ri"><svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><line x1="15" y1="39.5" x2="15" y2="46" stroke="white" stroke-width="1.8"/><rect x="9" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg></div>
+            <div class="rc-info">
+              <div class="rc-stat"><span class="status-dot off" id="dot-unloadL"></span>Status: <b id="status-unloadL">Stopped</b></div>
+              <div class="rc-stat">Temperature: <b id="temp-unloadL">70.0°C</b></div>
+              <div class="rc-stat">Velocity: <b id="vel-unloadL">75.0 RPM</b></div>
+              <div class="rc-name">Unloading Left</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sensors-card">
+          <div class="sc-title">Sensors</div>
+          <div class="sc-grid">
+            <div class="sc-item">Voltage: <b id="s-voltage">200.0 V</b></div>
+            <div class="sc-item">Carton Presence: <b id="s-carton">Yes</b></div>
+            <div class="sc-item">Ampere: <b id="s-ampere">20.0 A</b></div>
+            <div></div>
+            <div class="sc-item">Belt Velocity: <b id="s-belt">20.0 RPM</b></div>
+          </div>
+          <div class="sc-bar"><div class="sc-bar-fill" id="sc-bar-fill" style="width:50%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LIVE DATA ══ -->
+    <div class="page" id="page-livedata">
+      <div class="live-list">
+
+        <div class="live-card">
+          <div class="lc-left">
+            <svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><rect x="9" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg>
+            <div class="lc-label">Loading<br>Temperature</div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-top">
+              <span class="lc-source">ARM1 · TEMP · POST /api/data</span>
+              <div class="lc-val-wrap"><span class="lc-val" id="lv-loading-temp">70.0</span><span class="lc-unit">°C</span></div>
+            </div>
+            <div class="lc-canvas-wrap"><canvas id="chart-loading-temp"></canvas></div>
+          </div>
+        </div>
+
+        <div class="live-card">
+          <div class="lc-left">
+            <svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><rect x="29" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg>
+            <div class="lc-label">Loading<br>Velocity</div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-top">
+              <span class="lc-source">ARM1 · VEL · POST /api/data</span>
+              <div class="lc-val-wrap"><span class="lc-val" id="lv-loading-vel">75.0</span><span class="lc-unit">RPM</span></div>
+            </div>
+            <div class="lc-canvas-wrap"><canvas id="chart-loading-vel"></canvas></div>
+          </div>
+        </div>
+
+        <div class="live-card">
+          <div class="lc-left">
+            <svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><line x1="35" y1="39.5" x2="35" y2="46" stroke="white" stroke-width="1.8"/><rect x="29" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg>
+            <div class="lc-label">Unloading R<br>Temperature</div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-top">
+              <span class="lc-source">ARM2 · TEMP · POST /api/data</span>
+              <div class="lc-val-wrap"><span class="lc-val" id="lv-unloadR-temp">70.0</span><span class="lc-unit">°C</span></div>
+            </div>
+            <div class="lc-canvas-wrap"><canvas id="chart-unloadR-temp"></canvas></div>
+          </div>
+        </div>
+
+        <div class="live-card">
+          <div class="lc-left">
+            <svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><line x1="15" y1="39.5" x2="15" y2="46" stroke="white" stroke-width="1.8"/><rect x="9" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg>
+            <div class="lc-label">Unloading L<br>Temperature</div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-top">
+              <span class="lc-source">ARM3 · TEMP · POST /api/data</span>
+              <div class="lc-val-wrap"><span class="lc-val" id="lv-unloadL-temp">70.0</span><span class="lc-unit">°C</span></div>
+            </div>
+            <div class="lc-canvas-wrap"><canvas id="chart-unloadL-temp"></canvas></div>
+          </div>
+        </div>
+
+        <div class="live-card">
+          <div class="lc-left">
+            <svg viewBox="0 0 50 50" fill="none"><rect x="10" y="18" width="30" height="16" rx="3" stroke="white" stroke-width="1.8"/><line x1="25" y1="10" x2="25" y2="18" stroke="white" stroke-width="1.8"/><circle cx="25" cy="8" r="2.5" stroke="white" stroke-width="1.8"/><line x1="15" y1="34" x2="15" y2="42" stroke="white" stroke-width="1.8"/><line x1="35" y1="34" x2="35" y2="42" stroke="white" stroke-width="1.8"/><line x1="18" y1="26" x2="32" y2="26" stroke="white" stroke-width="1.5"/></svg>
+            <div class="lc-label">Belt<br>Velocity</div>
+          </div>
+          <div class="lc-right">
+            <div class="lc-top">
+              <span class="lc-source">BELT · VEL · POST /api/data</span>
+              <div class="lc-val-wrap"><span class="lc-val" id="lv-belt">20.0</span><span class="lc-unit">RPM</span></div>
+            </div>
+            <div class="lc-canvas-wrap"><canvas id="chart-belt"></canvas></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ CONTROL ══ -->
+    <div class="page" id="page-control">
+      <div class="ctrl-panel">
+        <div class="toggle-row">
+          <span class="toggle-label">Robot Arm 1 Activation</span>
+          <div style="display:flex;align-items:center">
+            <span class="post-flash" id="flash-arm1">✓ POST /api/data</span>
+            <label class="toggle"><input type="checkbox" id="ctrl-arm1"><div class="t-track"></div><div class="t-thumb"></div></label>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">Robot Arm 2 Activation</span>
+          <div style="display:flex;align-items:center">
+            <span class="post-flash" id="flash-arm2">✓ POST /api/data</span>
+            <label class="toggle"><input type="checkbox" id="ctrl-arm2"><div class="t-track"></div><div class="t-thumb"></div></label>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">Robot Arm 3 Activation</span>
+          <div style="display:flex;align-items:center">
+            <span class="post-flash" id="flash-arm3">✓ POST /api/data</span>
+            <label class="toggle"><input type="checkbox" id="ctrl-arm3"><div class="t-track"></div><div class="t-thumb"></div></label>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">Belt Activation</span>
+          <div style="display:flex;align-items:center">
+            <span class="post-flash" id="flash-belt">✓ POST /api/data</span>
+            <label class="toggle"><input type="checkbox" id="ctrl-belt" checked><div class="t-track"></div><div class="t-thumb"></div></label>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">Sensor 1 Activation</span>
+          <div style="display:flex;align-items:center">
+            <span class="post-flash" id="flash-s1">✓ POST /api/data</span>
+            <label class="toggle"><input type="checkbox" id="ctrl-s1"><div class="t-track"></div><div class="t-thumb"></div></label>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">Sensor 2 Activation</span>
+          <div style="display:flex;align-items:center">
+            <span class="post-flash" id="flash-s2">✓ POST /api/data</span>
+            <label class="toggle"><input type="checkbox" id="ctrl-s2" checked><div class="t-track"></div><div class="t-thumb"></div></label>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">Sensor 3 Activation</span>
+          <div style="display:flex;align-items:center">
+            <span class="post-flash" id="flash-s3">✓ POST /api/data</span>
+            <label class="toggle"><input type="checkbox" id="ctrl-s3"><div class="t-track"></div><div class="t-thumb"></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ALARMS ══ -->
+    <div class="page" id="page-alarms">
+      <div class="alarms-list">
+        <div class="alarm-card">
+          <div class="al-label"><div class="al-dot" id="al-dot-tia"></div>TIA<br>PORTAL</div>
+          <div class="al-content" id="al-tia"></div>
+        </div>
+        <div class="alarm-card">
+          <div class="al-label"><div class="al-dot" id="al-dot-nr"></div>NODE<br>RED</div>
+          <div class="al-content" id="al-nr"></div>
+        </div>
+        <div class="alarm-card">
+          <div class="al-label"><div class="al-dot" id="al-dot-rs"></div>ROBOT<br>STUDIO</div>
+          <div class="al-content" id="al-rs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SETTINGS ══ -->
+    <div class="page" id="page-settings">
+      <div class="settings-grid">
+        <div class="settings-card">
+          <div class="ri"><svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><rect x="9" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg></div>
+          <div class="s-info">
+            <div class="stat">Status: <b id="cfg-status-loading">Stopped</b></div>
+            <div class="stat">Temperature: <b id="cfg-temp-loading">70.0°C</b></div>
+            <div class="stat">Velocity: <b id="cfg-vel-loading">75.0 RPM</b></div>
+            <div class="s-name">Loading</div>
+          </div>
+        </div>
+        <div class="settings-card">
+          <div class="ri"><svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="35" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><line x1="35" y1="39.5" x2="35" y2="46" stroke="white" stroke-width="1.8"/><rect x="29" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg></div>
+          <div class="s-info">
+            <div class="stat">Status: <b id="cfg-status-unloadR">Stopped</b></div>
+            <div class="stat">Temperature: <b id="cfg-temp-unloadR">70.0°C</b></div>
+            <div class="stat">Velocity: <b id="cfg-vel-unloadR">75.0 RPM</b></div>
+            <div class="s-name">Unloading Right</div>
+          </div>
+        </div>
+        <div class="settings-card">
+          <div class="ri"><svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="8" r="4.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="12.5" x2="25" y2="20" stroke="white" stroke-width="1.8"/><circle cx="25" cy="22" r="3.5" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="15" y2="34" stroke="white" stroke-width="1.8"/><line x1="25" y1="25.5" x2="35" y2="34" stroke="white" stroke-width="1.8"/><circle cx="15" cy="36" r="3.5" stroke="white" stroke-width="1.8"/><line x1="15" y1="39.5" x2="15" y2="46" stroke="white" stroke-width="1.8"/><rect x="9" y="45" width="12" height="2.5" rx="1.25" fill="white"/></svg></div>
+          <div class="s-info">
+            <div class="stat">Status: <b id="cfg-status-unloadL">Stopped</b></div>
+            <div class="stat">Temperature: <b id="cfg-temp-unloadL">70.0°C</b></div>
+            <div class="stat">Velocity: <b id="cfg-vel-unloadL">75.0 RPM</b></div>
+            <div class="s-name">Unloading Left</div>
+          </div>
+        </div>
+        <div class="settings-sensors">
+          <div class="ss-title">Sensors</div>
+          <div class="ss-grid">
+            <div class="ss-item">Voltage: <b id="cfg-voltage">200.0 V</b></div>
+            <div class="ss-item">Carton Presence: <b id="cfg-carton">Yes</b></div>
+            <div class="ss-item">Ampere: <b id="cfg-ampere">20.0 A</b></div>
+            <div></div>
+            <div class="ss-item">Belt Velocity: <b id="cfg-belt">20.0 RPM</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   SIMULATED NODE-RED ↔ EXPRESS SERVER ↔ SQLITE ↔ FRONTEND
+   ─────────────────────────────────────────────────────────────────
+   This simulation mirrors the exact architecture of the real stack:
+
+   REAL FLOW:
+     PLC (S7-1500)  ──S7 nodes──►  Node-RED  ──POST /api/data──►
+     server.js  ──INSERT──►  SQLite (plc_history)
+     Frontend  ──GET /api/latest (1s)──►  Dashboard DOM
+     Frontend  ──GET /api/history?limit=30 (2s)──►  Charts
+
+   SIMULATED EQUIVALENTS:
+     nodeRedTick()   = Node-RED flow  (inject → S7 read → http request)
+     apiPostData()   = app.post("/api/data") in server.js
+     DB.rows[]       = plc_history SQLite table
+     apiGetLatest()  = app.get("/api/latest")
+     apiGetHistory() = app.get("/api/history?limit=N")
+     loadLatest()    = setInterval(loadLatest, 1000) in app.js
+     loadHistory()   = setInterval(loadHistory, 5000) in app.js
+     ctrl toggles    = Node-RED HMI → PLC output coil write → POST
+═══════════════════════════════════════════════════════════════════ */
+
+// ── In-memory DB — mirrors SQLite plc_history table ──────────────
+const DB = { rows: [], lastId: 0 };
+
+// ── latestData cache — mirrors `let latestData` in server.js ─────
+let latestData = null;
+
+// ── PLC live state (what S7 nodes would read each cycle) ─────────
+const plcState = {
+  loading:  { temp: 70.0, vel: 75.0, active: false },
+  unloadR:  { temp: 70.0, vel: 75.0, active: false },
+  unloadL:  { temp: 70.0, vel: 75.0, active: false },
+  belt:     { vel: 20.0 },
+  sensors:  { voltage: 200.0, ampere: 20.0, carton: true },
+};
+
+// ── HMI control state (what toggle writes to PLC output coils) ───
+const ctrl = {
+  arm1: false, arm2: false, arm3: false,
+  belt: true,
+  s1: false, s2: true, s3: false,
+};
+
+// ── Alarm logs per source ────────────────────────────────────────
+const alarmLog = { tia: [], nr: [], rs: [] };
+let nrConnected = true;
+
+function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+function jitter(v, d)      { return v + (Math.random() - 0.5) * 2 * d; }
+function nowHMS()          { return new Date().toTimeString().slice(0, 8); }
+
+/* ── Simulates app.post("/api/data") in server.js ───────────────
+   Node-RED http-request node POSTs msg.payload here.
+   server.js inserts a row into SQLite and updates latestData.    */
+function apiPostData(payload) {
+  latestData = { ...payload };
+  DB.lastId++;
+  DB.rows.unshift({ id: DB.lastId, ts: payload.ts, ...payload });
+  if (DB.rows.length > 300) DB.rows.pop(); // mirrors DB growth
+}
+
+/* ── Simulates app.get("/api/latest") ──────────────────────────
+   Returns the last-seen payload (latestData in server.js).       */
+function apiGetLatest() { return latestData ? { ...latestData } : null; }
+
+/* ── Simulates app.get("/api/history?limit=N") ──────────────── */
+function apiGetHistory(limit = 30) { return DB.rows.slice(0, limit); }
+
+/* ══════════════════════════════════════════════════════════════
+   NODE-RED SIMULATION TICK  (runs every 1 000 ms)
+   Mirrors what the real Node-RED inject → S7-read → function
+   → http-request chain does on every poll cycle.
+══════════════════════════════════════════════════════════════ */
+function nodeRedTick() {
+  // Simulate random PLC comms fault (0.4% chance)
+  if (Math.random() < 0.004) {
+    nrConnected = false;
+    pushAlarm('nr',  'err',  'Connection lost to PLC — S7 node timeout');
+    pushAlarm('tia', 'warn', 'Node-RED heartbeat missing — check OB35');
+    setTimeout(() => {
+      nrConnected = true;
+      pushAlarm('nr', 'ok', 'PLC connection restored — DB1 accessible');
+      pushAlarm('tia', 'ok', 'Communication re-established');
+    }, 4000 + Math.random() * 4000);
+  }
+
+  // Simulate occasional S7 DB read error (0.6% chance)
+  if (Math.random() < 0.006) {
+    pushAlarm('nr',  'err',  `S7 read error: DB1.DBW${4 + Math.floor(Math.random()*10)*2} — timeout`);
+    pushAlarm('tia', 'err',  `E${String(Math.floor(Math.random()*900)+100)} — Profinet frame error`);
+  }
+
+  if (!nrConnected) return; // Node-RED skips POST when disconnected
+
+  // ── "Read PLC tags" (S7 nodes): update state with sensor noise ──
+  if (ctrl.arm1) {
+    plcState.loading.active = true;
+    plcState.loading.temp = clamp(jitter(plcState.loading.temp, 1.4), 60, 115);
+    plcState.loading.vel  = clamp(jitter(plcState.loading.vel,  2.0), 58, 92);
+    // Overtemp alarm
+    if (plcState.loading.temp > 100) {
+      pushAlarm('tia', 'err',  `E012 — Loading arm overtemp: ${plcState.loading.temp.toFixed(1)}°C`);
+      pushAlarm('nr',  'warn', `Threshold exceeded: arm1.temp > 100`);
+      pushAlarm('rs',  'err',  `RAPID TaskRunError — thermal limit on arm1`);
+    }
+  } else {
+    plcState.loading.active = false;
+    // frozen — no jitter when stopped
+  }
+
+  if (ctrl.arm2) {
+    plcState.unloadR.active = true;
+    plcState.unloadR.temp = clamp(jitter(plcState.unloadR.temp, 1.1), 60, 110);
+    plcState.unloadR.vel  = clamp(jitter(plcState.unloadR.vel,  1.8), 58, 92);
+  } else {
+    plcState.unloadR.active = false;
+  }
+
+  if (ctrl.arm3) {
+    plcState.unloadL.active = true;
+    plcState.unloadL.temp = clamp(jitter(plcState.unloadL.temp, 1.1), 60, 110);
+    plcState.unloadL.vel  = clamp(jitter(plcState.unloadL.vel,  1.8), 58, 92);
+  } else {
+    plcState.unloadL.active = false;
+  }
+
+  if (ctrl.belt) {
+    plcState.belt.vel = clamp(jitter(plcState.belt.vel, 0.6), 15, 27);
+  }
+
+  if (ctrl.s1 || ctrl.s2) {
+    plcState.sensors.voltage = clamp(jitter(plcState.sensors.voltage, 2.0), 193, 212);
+    plcState.sensors.ampere  = clamp(jitter(plcState.sensors.ampere,  0.6), 17, 25);
+    plcState.sensors.carton  = Math.random() > 0.06;
+  }
+
+  // ── Build msg.payload (exactly what Node-RED function node creates) ──
+  const payload = {
+    ts:           new Date().toISOString(),
+    loadingTemp:  +plcState.loading.temp.toFixed(1),
+    loadingVel:   +plcState.loading.vel.toFixed(1),
+    loadingRun:   plcState.loading.active,
+    unloadRTemp:  +plcState.unloadR.temp.toFixed(1),
+    unloadRVel:   +plcState.unloadR.vel.toFixed(1),
+    unloadRRun:   plcState.unloadR.active,
+    unloadLTemp:  +plcState.unloadL.temp.toFixed(1),
+    unloadLVel:   +plcState.unloadL.vel.toFixed(1),
+    unloadLRun:   plcState.unloadL.active,
+    beltVel:      +plcState.belt.vel.toFixed(1),
+    voltage:      +plcState.sensors.voltage.toFixed(1),
+    ampere:       +plcState.sensors.ampere.toFixed(1),
+    carton:       plcState.sensors.carton,
+  };
+
+  // ── http-request node: POST /api/data → apiPostData() ────────
+  apiPostData(payload);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FRONTEND POLLING — mirrors app.js
+   loadLatest()   → setInterval(loadLatest,  1000)
+   loadHistory()  → setInterval(loadHistory, 5000) (here 2000)
+══════════════════════════════════════════════════════════════ */
+function loadLatest() {
+  const d = apiGetLatest();
+  if (!d) return;
+
+  // ── Robot cards ──────────────────────────────────────────────
+  applyRobotCard('loading', d.loadingRun, d.loadingTemp, d.loadingVel);
+  applyRobotCard('unloadR', d.unloadRRun, d.unloadRTemp, d.unloadRVel);
+  applyRobotCard('unloadL', d.unloadLRun, d.unloadLTemp, d.unloadLVel);
+
+  // ── Sensors ──────────────────────────────────────────────────
+  set('s-voltage', d.voltage + ' V');
+  set('s-ampere',  d.ampere  + ' A');
+  set('s-belt',    d.beltVel + ' RPM');
+  set('s-carton',  d.carton  ? 'Yes' : 'No');
+  const bpct = clamp(Math.round(((d.voltage - 190) / 25) * 100), 4, 100);
+  const bar = document.getElementById('sc-bar-fill');
+  if (bar) bar.style.width = bpct + '%';
+
+  // ── Live Data current values ─────────────────────────────────
+  set('lv-loading-temp',  d.loadingTemp);
+  set('lv-loading-vel',   d.loadingVel);
+  set('lv-unloadR-temp',  d.unloadRTemp);
+  set('lv-unloadL-temp',  d.unloadLTemp);
+  set('lv-belt',          d.beltVel);
+
+  // ── Settings mirror ──────────────────────────────────────────
+  set('cfg-status-loading', d.loadingRun ? 'Working' : 'Stopped');
+  set('cfg-temp-loading',   d.loadingTemp + '°C');
+  set('cfg-vel-loading',    d.loadingVel  + ' RPM');
+  set('cfg-status-unloadR', d.unloadRRun  ? 'Working' : 'Stopped');
+  set('cfg-temp-unloadR',   d.unloadRTemp + '°C');
+  set('cfg-vel-unloadR',    d.unloadRVel  + ' RPM');
+  set('cfg-status-unloadL', d.unloadLRun  ? 'Working' : 'Stopped');
+  set('cfg-temp-unloadL',   d.unloadLTemp + '°C');
+  set('cfg-vel-unloadL',    d.unloadLVel  + ' RPM');
+  set('cfg-voltage', d.voltage + ' V');
+  set('cfg-ampere',  d.ampere  + ' A');
+  set('cfg-belt',    d.beltVel + ' RPM');
+  set('cfg-carton',  d.carton  ? 'Yes' : 'No');
+}
+
+function applyRobotCard(id, running, temp, vel) {
+  const card = document.getElementById('card-' + id);
+  const dot  = document.getElementById('dot-'  + id);
+  const st   = document.getElementById('status-' + id);
+  const t    = document.getElementById('temp-'   + id);
+  const v    = document.getElementById('vel-'    + id);
+  if (!card) return;
+  if (running) {
+    card.classList.remove('stopped');
+    dot.className = 'status-dot on';
+    st.textContent = 'Working';
+    if (temp !== undefined) t.textContent = temp + '°C';
+    if (vel  !== undefined) v.textContent = vel  + ' RPM';
+  } else {
+    card.classList.add('stopped');
+    dot.className = 'status-dot off';
+    st.textContent = 'Stopped';
+    // Data frozen — do not update temp/vel when arm is off
+  }
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CHARTS — mirrors loadChart() + Chart.js in app.js
+   Uses GET /api/history to populate datasets, same as original.
+══════════════════════════════════════════════════════════════ */
+const POINTS = 40;
+const charts = {};
+const chartDefs = [
+  { id: 'chart-loading-temp',  field: 'loadingTemp',  color: '#e8453c', min: 55,  max: 120 },
+  { id: 'chart-loading-vel',   field: 'loadingVel',   color: '#3b82f6', min: 50,  max: 100 },
+  { id: 'chart-unloadR-temp',  field: 'unloadRTemp',  color: '#e8453c', min: 55,  max: 120 },
+  { id: 'chart-unloadL-temp',  field: 'unloadLTemp',  color: '#f59e0b', min: 55,  max: 120 },
+  { id: 'chart-belt',          field: 'beltVel',      color: '#22c55e', min: 10,  max: 35  },
+];
+
+function initCharts() {
+  chartDefs.forEach(def => {
+    if (charts[def.id]) return;
+    const canvas = document.getElementById(def.id);
+    if (!canvas) return;
+    charts[def.id] = new Chart(canvas.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: Array(POINTS).fill(''),
+        datasets: [{
+          data: Array(POINTS).fill(null),
+          borderColor: def.color,
+          borderWidth: 1.5,
+          pointRadius: 0,
+          tension: 0.35,
+          fill: true,
+          backgroundColor: def.color + '15',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: {
+          x: { display: false },
+          y: {
+            min: def.min, max: def.max,
+            display: true,
+            grid: { color: 'rgba(255,255,255,0.04)' },
+            ticks: { color: '#4a5060', font: { size: 9, family: 'Share Tech Mono' }, maxTicksLimit: 3 },
+            border: { display: false },
+          }
+        }
+      }
+    });
+  });
+}
+
+// mirrors setInterval(loadHistory, 5000) — polls GET /api/history
+function loadHistory() {
+  const rows = apiGetHistory(POINTS);
+  if (!rows.length) return;
+  const ordered = [...rows].reverse();
+  chartDefs.forEach(def => {
+    const chart = charts[def.id];
+    if (!chart) return;
+    chart.data.labels = ordered.map(r => r.id);
+    chart.data.datasets[0].data = ordered.map(r => r[def.field] ?? null);
+    chart.update('none');
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ALARMS — pushes timestamped entries to TIA/NodeRED/RobotStudio
+══════════════════════════════════════════════════════════════ */
+function pushAlarm(src, level, msg) {
+  alarmLog[src].unshift({ ts: nowHMS(), level, msg });
+  if (alarmLog[src].length > 50) alarmLog[src].pop();
+  renderAlarms(src);
+  const dotId = { tia: 'al-dot-tia', nr: 'al-dot-nr', rs: 'al-dot-rs' }[src];
+  const dot = document.getElementById(dotId);
+  if (dot && level === 'err') {
+    dot.classList.add('error');
+    setTimeout(() => dot.classList.remove('error'), 5000);
+  } else if (dot && level === 'warn') {
+    dot.classList.add('warn');
+    setTimeout(() => dot.classList.remove('warn'), 4000);
+  }
+}
+
+function renderAlarms(src) {
+  const el = document.getElementById('al-' + src);
+  if (!el) return;
+  el.innerHTML = alarmLog[src].map(e =>
+    `<div class="alarm-entry"><span class="ae-ts">[${e.ts}]</span><span class="ae-msg ${e.level}">${e.msg}</span></div>`
+  ).join('');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CONTROL TOGGLES
+   Each toggle simulates an HMI → Node-RED → PLC coil write,
+   then immediately triggers a tick + POST so Dashboard updates.
+══════════════════════════════════════════════════════════════ */
+function initToggles() {
+  const map = [
+    { inputId: 'ctrl-arm1', ctrlKey: 'arm1', flash: 'flash-arm1',
+      onMsg:  ['nr','ok','Robot Arm 1 activated — coil Q0.0 SET'],
+      offMsg: ['nr','warn','Robot Arm 1 deactivated — coil Q0.0 RESET'],
+      tiaOff: ['tia','warn','A001 — Arm1 stopped via HMI'] },
+    { inputId: 'ctrl-arm2', ctrlKey: 'arm2', flash: 'flash-arm2',
+      onMsg:  ['nr','ok','Robot Arm 2 activated — coil Q0.1 SET'],
+      offMsg: ['nr','warn','Robot Arm 2 deactivated — coil Q0.1 RESET'],
+      tiaOff: ['tia','warn','A002 — Arm2 stopped via HMI'] },
+    { inputId: 'ctrl-arm3', ctrlKey: 'arm3', flash: 'flash-arm3',
+      onMsg:  ['nr','ok','Robot Arm 3 activated — coil Q0.2 SET'],
+      offMsg: ['nr','warn','Robot Arm 3 deactivated — coil Q0.2 RESET'],
+      tiaOff: ['tia','warn','A003 — Arm3 stopped via HMI'] },
+    { inputId: 'ctrl-belt', ctrlKey: 'belt', flash: 'flash-belt',
+      onMsg:  ['rs','ok','Belt conveyor started'],
+      offMsg: ['rs','warn','Belt conveyor stopped'] },
+    { inputId: 'ctrl-s1', ctrlKey: 's1', flash: 'flash-s1',
+      onMsg:  ['nr','ok','Sensor 1 enabled'],
+      offMsg: ['nr','warn','Sensor 1 disabled'] },
+    { inputId: 'ctrl-s2', ctrlKey: 's2', flash: 'flash-s2',
+      onMsg:  ['nr','ok','Sensor 2 enabled'],
+      offMsg: ['nr','warn','Sensor 2 disabled'] },
+    { inputId: 'ctrl-s3', ctrlKey: 's3', flash: 'flash-s3',
+      onMsg:  ['nr','ok','Sensor 3 enabled'],
+      offMsg: ['nr','warn','Sensor 3 disabled'] },
+  ];
+
+  map.forEach(cfg => {
+    const input = document.getElementById(cfg.inputId);
+    if (!input) return;
+    input.checked = ctrl[cfg.ctrlKey];
+    input.addEventListener('change', () => {
+      ctrl[cfg.ctrlKey] = input.checked;
+
+      // Log the alarm entry that matches the action
+      const msgs = input.checked ? [cfg.onMsg] : [cfg.offMsg, cfg.tiaOff].filter(Boolean);
+      msgs.forEach(m => { if(m) pushAlarm(m[0], m[1], m[2]); });
+
+      // Simulate the http-request node completing: flash "✓ POST /api/data"
+      const flashEl = document.getElementById(cfg.flash);
+      if (flashEl) {
+        flashEl.classList.add('show');
+        setTimeout(() => flashEl.classList.remove('show'), 1600);
+      }
+
+      // Immediately tick so Dashboard reflects toggle without waiting 1s
+      nodeRedTick();
+      loadLatest();
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAV + DATE PICKER
+══════════════════════════════════════════════════════════════ */
+const nav   = document.getElementById('nav');
+const pill  = document.getElementById('navPill');
+const btns  = nav.querySelectorAll('.nav-btn');
+const pLabels = { dashboard:'Dashboard', livedata:'Live Data', control:'Control', alarms:'Alarms', settings:'Settings' };
+
+function setPage(key) {
+  btns.forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const btn = nav.querySelector(`[data-page="${key}"]`);
+  if (btn) { btn.classList.add('active'); movePill(btn); }
+  const pg = document.getElementById('page-' + key);
+  if (pg) pg.classList.add('active');
+  document.getElementById('pageLabel').textContent = pLabels[key];
+  document.getElementById('dateNav').style.display = key === 'control' ? 'none' : '';
+  if (key === 'livedata') setTimeout(() => { initCharts(); loadHistory(); }, 40);
+}
+
+function movePill(btn) {
+  const nr = nav.getBoundingClientRect();
+  const br = btn.getBoundingClientRect();
+  pill.style.left  = (br.left - nr.left) + 'px';
+  pill.style.width = br.width + 'px';
+}
+
+btns.forEach(b => b.addEventListener('click', () => setPage(b.dataset.page)));
+document.querySelectorAll('.date-day').forEach(d => {
+  d.addEventListener('click', () => {
+    document.querySelectorAll('.date-day').forEach(x => x.classList.remove('selected'));
+    d.classList.add('selected');
+  });
+});
+
+/* ══════════════════════════════════════════════════════════════
+   BOOTSTRAP
+══════════════════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  // Position nav pill
+  movePill(nav.querySelector('.nav-btn.active'));
+
+  // Seed initial alarm log (what you'd see on startup)
+  pushAlarm('nr',  'ok',  'Node-RED started — flow deployed');
+  pushAlarm('nr',  'ok',  'S7 node connected to 192.168.0.1:102');
+  pushAlarm('nr',  'ok',  'DB1 readable — rack 0 slot 1');
+  pushAlarm('tia', 'ok',  'TIA Portal v17 — CPU S7-1500 ONLINE');
+  pushAlarm('tia', 'ok',  'OB1 cyclic execution running (10ms)');
+  pushAlarm('tia', 'ok',  'All safety interlocks OK');
+  pushAlarm('rs',  'ok',  'RobotStudio connected — IRB 1200');
+  pushAlarm('rs',  'ok',  'RAPID program MainModule loaded');
+  pushAlarm('rs',  'ok',  'Task T_ROB1 ready — waiting for trigger');
+
+  initToggles();
+
+  // Prime the DB with 30 ticks of historical data before charts render
+  for (let i = 0; i < 30; i++) nodeRedTick();
+
+  // First paint
+  loadLatest();
+  initCharts();
+  loadHistory();
+
+  // mirrors setInterval(loadLatest, 1000) in app.js
+  setInterval(() => { nodeRedTick(); loadLatest(); }, 1000);
+
+  // mirrors setInterval(loadHistory, 5000) in app.js — using 2s for smoother charts
+  setInterval(loadHistory, 2000);
+
+  setPage('dashboard');
+});
+</script>
+</body>
+</html>

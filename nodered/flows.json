@@ -1,0 +1,700 @@
+[
+    {
+        "id": "74495d5772959a6b",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7faac14f3e1f265a",
+        "type": "s7 in",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "mode": "single",
+        "variable": "pressure",
+        "diff": false,
+        "name": "",
+        "x": 80,
+        "y": 40,
+        "wires": [
+            [
+                "74f06f8c26f437f7"
+            ]
+        ]
+    },
+    {
+        "id": "57866eefb0835de8",
+        "type": "debug",
+        "z": "74495d5772959a6b",
+        "name": "Pressure Value: ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1480,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "956592325cd27448",
+        "type": "s7 in",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "mode": "single",
+        "variable": "motorRun",
+        "diff": false,
+        "name": "",
+        "x": 80,
+        "y": 140,
+        "wires": [
+            [
+                "74545878deeb368a",
+                "b6df439303a8610e"
+            ]
+        ]
+    },
+    {
+        "id": "74545878deeb368a",
+        "type": "debug",
+        "z": "74495d5772959a6b",
+        "name": "Motor Run Status: ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "4b6eb7e238f35b4b",
+        "type": "s7 in",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "mode": "single",
+        "variable": "temperature",
+        "diff": false,
+        "name": "",
+        "x": 70,
+        "y": 240,
+        "wires": [
+            [
+                "4c8d98fce16bac5f"
+            ]
+        ]
+    },
+    {
+        "id": "6953285b41498b3f",
+        "type": "debug",
+        "z": "74495d5772959a6b",
+        "name": "Temperature Value: ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "e8b67e36b1831c05",
+        "type": "s7 in",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "mode": "single",
+        "variable": "speedRPM",
+        "diff": false,
+        "name": "",
+        "x": 80,
+        "y": 320,
+        "wires": [
+            [
+                "4e6dd749b05307b1",
+                "8f746dfade556ec1"
+            ]
+        ]
+    },
+    {
+        "id": "4e6dd749b05307b1",
+        "type": "debug",
+        "z": "74495d5772959a6b",
+        "name": "Speed RPM Value: ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "0321737b4366523a",
+        "type": "s7 in",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "mode": "single",
+        "variable": "alarmActive",
+        "diff": false,
+        "name": "",
+        "x": 70,
+        "y": 380,
+        "wires": [
+            [
+                "354612779fd0d276",
+                "53c29cf8c63b5171"
+            ]
+        ]
+    },
+    {
+        "id": "354612779fd0d276",
+        "type": "debug",
+        "z": "74495d5772959a6b",
+        "name": "Alarm Active: ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1170,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "2eb4f2d1a0e48a50",
+        "type": "s7 out",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "variable": "motorRun",
+        "name": "",
+        "x": 360,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "8fcdf5c283203def",
+        "type": "s7 out",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "variable": "alarmActive",
+        "name": "",
+        "x": 370,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "2d35a0b8d242ca1f",
+        "type": "inject",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 190,
+        "y": 440,
+        "wires": [
+            [
+                "2eb4f2d1a0e48a50"
+            ]
+        ]
+    },
+    {
+        "id": "e7808cc7a224aaad",
+        "type": "inject",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 190,
+        "y": 520,
+        "wires": [
+            [
+                "8fcdf5c283203def"
+            ]
+        ]
+    },
+    {
+        "id": "1554829527e9c63d",
+        "type": "inject",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 190,
+        "y": 480,
+        "wires": [
+            [
+                "2eb4f2d1a0e48a50"
+            ]
+        ]
+    },
+    {
+        "id": "043926ae2b447d6f",
+        "type": "inject",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 190,
+        "y": 560,
+        "wires": [
+            [
+                "8fcdf5c283203def"
+            ]
+        ]
+    },
+    {
+        "id": "74f06f8c26f437f7",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "ClearingPressureData",
+        "func": "msg.payload = Number(msg.payload.toFixed(2));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 40,
+        "wires": [
+            [
+                "c33c0fccd998c7f6"
+            ]
+        ]
+    },
+    {
+        "id": "4c8d98fce16bac5f",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "ClearingTemperatureData",
+        "func": "msg.payload = Number(msg.payload.toFixed(2));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 240,
+        "wires": [
+            [
+                "6953285b41498b3f",
+                "7aaeda68821b4b90"
+            ]
+        ]
+    },
+    {
+        "id": "e32f6929f306a0bf",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "Build latest snapshot",
+        "func": "let data = flow.get(\"latestData\") || {};\n\nif (msg.topic === \"pressure\") data.pressure = msg.payload;\nif (msg.topic === \"motorRun\") data.motorRun = msg.payload;\nif (msg.topic === \"temperature\") data.temperature = msg.payload;\nif (msg.topic === \"speedRPM\") data.speedRPM = msg.payload;\nif (msg.topic === \"alarmActive\") data.alarmActive = msg.payload;\n\ndata.ts = new Date().toISOString();\n\nflow.set(\"latestData\", data);\n\nmsg.payload = data;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 40,
+        "wires": [
+            [
+                "55aa0233e1773f02"
+            ]
+        ]
+    },
+    {
+        "id": "c33c0fccd998c7f6",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "set pressure topic",
+        "func": "msg.topic = \"pressure\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 40,
+        "wires": [
+            [
+                "e32f6929f306a0bf"
+            ]
+        ]
+    },
+    {
+        "id": "b6df439303a8610e",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "set motor topic",
+        "func": "msg.topic = \"motorRun\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 100,
+        "wires": [
+            [
+                "e32f6929f306a0bf"
+            ]
+        ]
+    },
+    {
+        "id": "7aaeda68821b4b90",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "set temperature topic",
+        "func": "msg.topic = \"temperature\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 200,
+        "wires": [
+            [
+                "e32f6929f306a0bf"
+            ]
+        ]
+    },
+    {
+        "id": "8f746dfade556ec1",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "set speedRPM topic",
+        "func": "msg.topic = \"speedRPM\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 280,
+        "wires": [
+            [
+                "e32f6929f306a0bf"
+            ]
+        ]
+    },
+    {
+        "id": "53c29cf8c63b5171",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "set alarmActive topic",
+        "func": "msg.topic = \"alarmActive\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 340,
+        "wires": [
+            [
+                "e32f6929f306a0bf"
+            ]
+        ]
+    },
+    {
+        "id": "3a5e17a3fb65345a",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "function 1",
+        "func": "let latest = flow.get(\"latestData\") || {};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = latest;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 580,
+        "wires": [
+            [
+                "02f564aa15098ff7"
+            ]
+        ]
+    },
+    {
+        "id": "55e6ad7eed468f96",
+        "type": "http in",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "url": "/api/latest",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 800,
+        "y": 580,
+        "wires": [
+            [
+                "3a5e17a3fb65345a"
+            ]
+        ]
+    },
+    {
+        "id": "02f564aa15098ff7",
+        "type": "http response",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1190,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "4e81c96bb3e891cb",
+        "type": "http in",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "url": "/app",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 840,
+        "y": 660,
+        "wires": [
+            [
+                "fc99e556d4801a0e"
+            ]
+        ]
+    },
+    {
+        "id": "202c5e3847b203da",
+        "type": "http response",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1190,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "fc99e556d4801a0e",
+        "type": "template",
+        "z": "74495d5772959a6b",
+        "name": "PLC Web App",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>PLC Live Data</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      background: #f4f6f8;\n      padding: 20px;\n    }\n    .container {\n      max-width: 800px;\n      margin: auto;\n    }\n    h1 {\n      margin-bottom: 20px;\n    }\n    .card {\n      background: white;\n      padding: 15px;\n      margin-bottom: 12px;\n      border-radius: 10px;\n      box-shadow: 0 2px 6px rgba(0,0,0,0.08);\n    }\n    .label {\n      color: #666;\n      font-size: 14px;\n    }\n    .value {\n      font-size: 28px;\n      font-weight: bold;\n      margin-top: 5px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>PLC Live Data</h1>\n\n    <div class=\"card\">\n      <div class=\"label\">Pressure</div>\n      <div class=\"value\" id=\"pressure\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Motor Run</div>\n      <div class=\"value\" id=\"motorRun\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Temperature</div>\n      <div class=\"value\" id=\"temperature\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Speed RPM</div>\n      <div class=\"value\" id=\"speedRPM\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Alarm Active</div>\n      <div class=\"value\" id=\"alarmActive\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Timestamp</div>\n      <div class=\"value\" id=\"ts\">--</div>\n    </div>\n  </div>\n\n  <script>\n    async function loadData() {\n      try {\n        const res = await fetch('/api/latest');\n        const data = await res.json();\n\n        document.getElementById('pressure').textContent = data.pressure;\n        document.getElementById('motorRun').textContent = data.motorRun ? 'ON' : 'OFF';\n        document.getElementById('temperature').textContent = data.temperature;\n        document.getElementById('speedRPM').textContent = data.speedRPM;\n        document.getElementById('alarmActive').textContent = data.alarmActive ? 'ACTIVE' : 'NORMAL';\n        document.getElementById('ts').textContent = data.ts;\n      } catch (err) {\n        console.error(err);\n      }\n    }\n\n    loadData();\n    setInterval(loadData, 1000);\n  </script>\n</body>\n</html>",
+        "output": "str",
+        "x": 1040,
+        "y": 660,
+        "wires": [
+            [
+                "202c5e3847b203da"
+            ]
+        ]
+    },
+    {
+        "id": "0386f28650161d9d",
+        "type": "sqlite",
+        "z": "74495d5772959a6b",
+        "mydb": "",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "plc_data.db",
+        "x": 630,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68ee8b5c7dc982f7",
+        "type": "inject",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 740,
+        "wires": [
+            [
+                "8fd03c862af73551"
+            ]
+        ]
+    },
+    {
+        "id": "8fd03c862af73551",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "function 2",
+        "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS plc_history (\nid INTEGER PRIMARY KEY AUTOINCREMENT,\nts TEXT,\npressure REAL,\nmotorRun INTEGER,\ntemperature REAL,\nspeedRPM REAL,\nalarmActive INTEGER\n);\n`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 740,
+        "wires": [
+            [
+                "0386f28650161d9d"
+            ]
+        ]
+    },
+    {
+        "id": "55aa0233e1773f02",
+        "type": "http request",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:3000/api/data",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1130,
+        "y": 40,
+        "wires": [
+            [
+                "57866eefb0835de8"
+            ]
+        ]
+    },
+    {
+        "id": "abd56ab7647d1e53",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.0.1",
+        "port": "102",
+        "rack": "0",
+        "slot": "1",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": 2,
+        "cycletime": 1000,
+        "timeout": 2000,
+        "name": "",
+        "vartable": [
+            {
+                "addr": "DB1,REAL0",
+                "name": "pressure"
+            },
+            {
+                "addr": "DB1,X4.0",
+                "name": "motorRun"
+            },
+            {
+                "addr": "DB1,REAL6",
+                "name": "temperature"
+            },
+            {
+                "addr": "DB1,REAL10",
+                "name": "speedRPM"
+            },
+            {
+                "addr": "DB1,X14.0",
+                "name": "alarmActive"
+            }
+        ]
+    },
+    {
+        "id": "d509f68a289ef534",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-s7": "3.1.1",
+            "node-red-node-sqlite": "1.1.1"
+        }
+    }
+]
