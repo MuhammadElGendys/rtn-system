@@ -23,5 +23,5 @@ This website is designed to monitor and control the machine through Node-RED, wh
 
 # How to run the site
 
-### N.B.:
+### N.B.
 This website was developed using simulation software and has not been implemented in a real-world application. It has not undergone sufficient testing for use in an industrial plant.
