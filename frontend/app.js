@@ -44,30 +44,3 @@ loadHistory()
 
 setInterval(loadLatest,1000)
 setInterval(loadHistory,5000)
-
-let pressureChart
-
-async function loadChart(){
-
-const res = await fetch("http://localhost:3000/api/history?limit=20")
-const data = await res.json()
-
-const labels = data.map(r => r.id).reverse()
-const values = data.map(r => r.pressure).reverse()
-
-const ctx = document.getElementById("pressureChart")
-
-pressureChart = new Chart(ctx, {
-type: 'line',
-data: {
-labels: labels,
-datasets: [{
-label: 'Pressure',
-data: values
-}]
-}
-})
-
-}
-
-loadChart()
