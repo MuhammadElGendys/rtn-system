@@ -49,3 +49,8 @@ Start the backend server:
 
 ```bash
 node server.js
+```
+
+# Fix:
+- Should fix the toggle button for enable/disable the motor
+    - most probably, it's a connection issue with backend and node-red
