@@ -1,27 +1,47 @@
 # Objective
-This website is designed to monitor and control the machine through Node-RED, which interfaces with the PLC to manage the robot’s functionality.
+This web application is designed to monitor and control a robotic system through Node-RED.  
+Data is exchanged with TIA Portal using the S7 PUT/GET protocol, allowing the PLC to manage and simulate the robot's behavior.
 
-# Running sequence
-1. Start S7-PLCSIM Advanced V7.0
-    - Create a virtual PLC.
-    - Select “TCP/IP Single Adapter” to enable external communication.
-2. Launch TIA Portal V20
-    - Open your project and start the PLC program.
-3. Start Node-RED
-    - Open Command Prompt.
-    - Run the command: node-red.
-4. Access the Node-RED interface
-    - Open your browser.
-    - Enter the IP address shown in the Command Prompt to access the Node-RED dashboard.
-5. Import and deploy the flow
-    - Import the provided JSON flow file.
-    - Install any required libraries or add-ons.
-    - Deploy the flow.
-6. Configure IP settings
-    - Update the IP address in HTTP request nodes to match the PC hosting the website (primarily server-side, and frontend if needed).
+---
 
+# System Startup Sequence
 
-# How to run the site
+1. Start S7-PLCSIM Advanced V7.0  
+   - Create a virtual PLC instance  
+   - Select **"TCP/IP Single Adapter"** to enable external communication  
 
-### N.B.
-This website was developed using simulation software and has not been implemented in a real-world application. It has not undergone sufficient testing for use in an industrial plant.
+2. Launch TIA Portal V20  
+   - Open the project  
+   - Download and start the PLC program  
+
+3. Start Node-RED  
+   - Open Command Prompt  
+   - Run:  
+     ```bash
+     node-red
+     ```
+
+4. Access Node-RED  
+   - Open a browser  
+   - Navigate to:  
+     ```
+     http://<your-ip>:1880
+     ```
+
+5. Import and Deploy the Flow  
+   - Import the provided JSON flow  
+   - Install required nodes/packages if missing  
+   - Click **Deploy**
+
+6. Configure Network Settings (if needed)  
+   - Skip this step if everything runs on the same PC  
+   - Otherwise, update all IP addresses (Node-RED, frontend, API endpoints) to match the host machine  
+
+---
+
+# How to Run the Web Application
+
+Start the backend server:
+
+```bash
+node server.js
