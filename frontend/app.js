@@ -1,6 +1,7 @@
 async function loadLatest(){
 
-const res = await fetch("http://localhost:3000/api/latest")
+// change always the URL to match your backend API endpoint
+const res = await fetch("http://192.168.178.187:3000/api/latest")
 const data = await res.json()
 
 document.getElementById("pressure").textContent = data.pressure
@@ -12,8 +13,9 @@ document.getElementById("alarmActive").textContent = data.alarmActive ? "ACTIVE"
 }
 
 async function loadHistory(){
-
-const res = await fetch("http://localhost:3000/api/history?limit=10")
+    
+    // change always the URL to match your backend API endpoint
+const res = await fetch("http://192.168.178.187:3000/api/history?limit=10")
 const rows = await res.json()
 
 const table = document.getElementById("historyTable")
