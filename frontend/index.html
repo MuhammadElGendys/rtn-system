@@ -47,10 +47,90 @@ Alarm: <span id="alarmActive">--</span>
 
 <tbody id="historyTable">
 </tbody>
+
+<!-- CONTROLS -->
+<button onclick="toggleMotor()">Toggle Motor</button>
+<!-- CONTROLS -->
+
+
 </table>
+
+<!-- MACHINE DATA -->
+
+<section class="machines">
+    <div>
+        <h3>Pressure</h3>
+        <p id="pressure">--</p>
+    </div>
+
+    <div>
+        <h3>Temperature</h3>
+        <p id="temperature">--</p>
+    </div>
+    
+    <div>
+        <h3>Speed RPM</h3>
+        <p id="speed">--</p>
+    </div>
+    
+    <div>
+        <h3>Motor</h3>
+        <p id="motor">--</p>
+    </div>
+    
+    <div>
+        <h3>Alarm</h3>
+        <p id="alarm">--</p>
+    </div>
+</section>
+<!-- MACHINE DATA -->
 
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+<!-- API CONNECTION -->
+ <script>
+async function loadData() {
+    try {
+        const res = await fetch("http://localhost:1880/api/latest");
+        const data = await res.json();
+
+        // CONNECT DATA TO HTML (UI)
+        document.getElementById("pressure").textContent = data.pressure ?? "--";
+        document.getElementById("temperature").textContent = data.temperature ?? "--";
+        document.getElementById("speed").textContent = data.speedRPM ?? "--";
+
+        document.getElementById("motor").textContent = data.motorRun ? "ON" : "OFF";
+        document.getElementById("alarm").textContent = data.alarmActive ? "ACTIVE" : "NORMAL";
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// UPDATE EVERY SECOND
+setInterval(loadData, 1000);
+loadData();
+</script>
+<!-- API CONNECTION -->
+
+
+<!-- CONTROLS -->
+<script>
+async function toggleMotor() {
+    await fetch("http://192.168.0.1:1880/api/control", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            motorRun: true
+        })
+    });
+}
+</script>
+<!-- CONTROLS -->
+ 
 </body>
 </html>
