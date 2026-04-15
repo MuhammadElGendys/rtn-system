@@ -1,3 +1,6 @@
+// added after changing code by bash npm install axios
+const axios = require("axios");
+
 const express = require("express");
 const cors = require("cors");
 const db = require("./database/db");
@@ -91,6 +94,27 @@ app.get("/api/history", (req, res) => {
             res.json(rows);
         }
     );
+});
+
+// Control endpoint to send commands to Node-RED
+app.post("/api/control", async (req, res) => {
+    try {
+        const response = await axios.post(
+            /// change always the URL to match your Node-RED control endpoint
+            "http://192.168.178.187:3000/api/control",
+            req.body
+        );
+
+        res.json(response.data);
+
+    } catch (err) {
+        console.error("Control error:", err.message);
+
+        res.status(500).json({
+            status: "error",
+            message: "Control request failed"
+        });
+    }
 });
 
 app.listen(PORT, () => {
