@@ -166,11 +166,12 @@ body {
 .days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+    gap: 8px;
 }
 
 .day-cell {
-    aspect-ratio: 1;
+    min-width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -179,8 +180,8 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
     transition: all 0.2s;
-    min-height: 40px;
 }
 
 .day-cell:hover:not(.empty) {

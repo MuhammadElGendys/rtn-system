@@ -47,93 +47,89 @@ function initTabs() {
  * Generate calendar for current month
  * Displays days in grid format, supporting month navigation
  */
+/**
+ * Generate calendar for current week (7 days: Monday-Sunday)
+ * Displays compact week view with navigation to previous/next weeks
+ */
 function generateCalendar() {
-    // Extract year and month from the current date state
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+    // Find the Monday of the current week
+    // currentDate is the reference date, calculate which day of week it is
+    const dayOfWeek = currentDate.getDay(); // 0=Sunday, 1=Monday, ..., 6=Saturday
+    // Calculate days to subtract from currentDate to get to Monday (0 for Mon, 1 for Tue, etc.)
+    const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Monday start (0 if Monday, 6 if Sunday)
 
-    // Update the calendar header to display current month and year
+    // Create a new date for Monday of this week
+    const weekStart = new Date(currentDate);
+    weekStart.setDate(weekStart.getDate() - daysToMonday);
+
+    // Update the calendar header to display month and year of the week
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'];
-    document.getElementById('monthName').textContent = monthNames[month];
-    document.getElementById('yearName').textContent = year;
 
-    // Calculate calendar positioning data:
-    // - firstDay: day of week the month starts (0=Sunday to 6=Saturday)
-    // - daysInMonth: total days in current month
-    // - daysInPrevMonth: total days in previous month (needed for padding)
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const daysInPrevMonth = new Date(year, month, 0).getDate();
+    // Use the month/year from the Monday of the week (could span two months)
+    document.getElementById('monthName').textContent = monthNames[weekStart.getMonth()];
+    document.getElementById('yearName').textContent = weekStart.getFullYear();
 
-    // Clear the calendar grid and prepare it for new days
+    // Clear the calendar grid and prepare to add 7 days for the week
     const daysGrid = document.getElementById('daysGrid');
     daysGrid.innerHTML = '';
 
-    // Add padding cells from previous month to fill the first week
-    // Converts Sunday-based (0) to Monday-based (1) calendar format
-    // Example: If month starts on Wednesday (3), we need 2 empty cells from previous month
-    const startDay = firstDay === 0 ? 6 : firstDay - 1; // Adjust for Monday start
-    for (let i = startDay - 1; i >= 0; i--) {
-        const dayCell = document.createElement('div');
-        dayCell.className = 'day-cell empty';
-        dayCell.textContent = daysInPrevMonth - i;
-        daysGrid.appendChild(dayCell);
-    }
-
-    // Add all days for the current month
+    // Get today's date for highlighting
     const today = new Date();
-    for (let day = 1; day <= daysInMonth; day++) {
+
+    // Generate exactly 7 cells for each day of the week (Monday through Sunday)
+    for (let i = 0; i < 7; i++) {
+        // Create a date for each day in the week starting from Monday
+        const dayDate = new Date(weekStart);
+        dayDate.setDate(weekStart.getDate() + i);
+
+        // Extract day number for display
+        const dayNumber = dayDate.getDate();
+
+        // Create day cell element for the calendar
         const dayCell = document.createElement('div');
         dayCell.className = 'day-cell';
-        dayCell.textContent = day;
+        dayCell.textContent = dayNumber;
 
-        // Check if this day is today and apply 'today' class for visual highlighting
-        // Compares the calendar date with today's date (only if same year, month, and day)
-        if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+        // Highlight today's date with the 'today' class (red background in CSS)
+        // Compares day, month, and year to determine if this is today
+        if (dayNumber === today.getDate() &&
+            dayDate.getMonth() === today.getMonth() &&
+            dayDate.getFullYear() === today.getFullYear()) {
             dayCell.classList.add('today');
         }
 
         // Add click listener to log selected date (can be extended for date selection)
         dayCell.addEventListener('click', () => {
-            console.log(`Selected: ${monthNames[month]} ${day}, ${year}`);
+            console.log(`Selected: ${monthNames[dayDate.getMonth()]} ${dayNumber}, ${dayDate.getFullYear()}`);
         });
 
-        daysGrid.appendChild(dayCell);
-    }
-
-    // Fill the end of the calendar grid with padding from next month
-    // A standard calendar grid is 6 weeks × 7 days = 42 cells total
-    // This fills remaining cells to complete the grid structure
-    const totalCells = daysGrid.children.length;
-    const remainingCells = 42 - totalCells; // 6 weeks × 7 days
-    for (let day = 1; day <= remainingCells; day++) {
-        const dayCell = document.createElement('div');
-        dayCell.className = 'day-cell empty';
-        dayCell.textContent = day;
+        // Append day cell to the calendar grid
         daysGrid.appendChild(dayCell);
     }
 }
 
 /**
- * Navigate to previous month
- * Subtracts one month from currentDate and regenerates calendar display
+ * Navigate to previous week
+ * Moves the calendar back by 7 days and regenerates the week display
  */
 function prevMonth() {
-    // Decrease month by 1 (JavaScript Date automatically handles year rollover)
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    // Regenerate calendar grid with new month's dates
+    // Move back one week (7 days)
+    // This changes the reference date for the week calculation in generateCalendar()
+    currentDate.setDate(currentDate.getDate() - 7);
+    // Regenerate calendar grid with the new week
     generateCalendar();
 }
 
 /**
- * Navigate to next month
- * Adds one month to currentDate and regenerates calendar display
+ * Navigate to next week
+ * Moves the calendar forward by 7 days and regenerates the week display
  */
 function nextMonth() {
-    // Increase month by 1 (JavaScript Date automatically handles year rollover)
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    // Regenerate calendar grid with new month's dates
+    // Move forward one week (7 days)
+    // This changes the reference date for the week calculation in generateCalendar()
+    currentDate.setDate(currentDate.getDate() + 7);
+    // Regenerate calendar grid with the new week
     generateCalendar();
 }
 
