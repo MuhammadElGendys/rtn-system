@@ -37,7 +37,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1480,
+        "x": 1200,
         "y": 40,
         "wires": []
     },
@@ -51,7 +51,7 @@
         "diff": false,
         "name": "",
         "x": 80,
-        "y": 140,
+        "y": 160,
         "wires": [
             [
                 "74545878deeb368a",
@@ -72,8 +72,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 140,
+        "x": 1210,
+        "y": 160,
         "wires": []
     },
     {
@@ -85,8 +85,8 @@
         "variable": "temperature",
         "diff": false,
         "name": "",
-        "x": 70,
-        "y": 240,
+        "x": 90,
+        "y": 220,
         "wires": [
             [
                 "4c8d98fce16bac5f"
@@ -106,8 +106,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 240,
+        "x": 1210,
+        "y": 220,
         "wires": []
     },
     {
@@ -120,7 +120,7 @@
         "diff": false,
         "name": "",
         "x": 80,
-        "y": 320,
+        "y": 280,
         "wires": [
             [
                 "4e6dd749b05307b1",
@@ -141,8 +141,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 320,
+        "x": 1210,
+        "y": 280,
         "wires": []
     },
     {
@@ -154,8 +154,8 @@
         "variable": "alarmActive",
         "diff": false,
         "name": "",
-        "x": 70,
-        "y": 380,
+        "x": 90,
+        "y": 340,
         "wires": [
             [
                 "354612779fd0d276",
@@ -176,8 +176,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1170,
-        "y": 380,
+        "x": 1190,
+        "y": 340,
         "wires": []
     },
     {
@@ -187,8 +187,8 @@
         "endpoint": "abd56ab7647d1e53",
         "variable": "motorRun",
         "name": "",
-        "x": 360,
-        "y": 460,
+        "x": 260,
+        "y": 440,
         "wires": []
     },
     {
@@ -198,8 +198,8 @@
         "endpoint": "abd56ab7647d1e53",
         "variable": "alarmActive",
         "name": "",
-        "x": 370,
-        "y": 540,
+        "x": 270,
+        "y": 520,
         "wires": []
     },
     {
@@ -219,8 +219,8 @@
         "topic": "",
         "payload": "true",
         "payloadType": "bool",
-        "x": 190,
-        "y": 440,
+        "x": 90,
+        "y": 420,
         "wires": [
             [
                 "2eb4f2d1a0e48a50"
@@ -244,8 +244,8 @@
         "topic": "",
         "payload": "true",
         "payloadType": "bool",
-        "x": 190,
-        "y": 520,
+        "x": 90,
+        "y": 500,
         "wires": [
             [
                 "8fcdf5c283203def"
@@ -269,8 +269,8 @@
         "topic": "",
         "payload": "false",
         "payloadType": "bool",
-        "x": 190,
-        "y": 480,
+        "x": 90,
+        "y": 460,
         "wires": [
             [
                 "2eb4f2d1a0e48a50"
@@ -294,8 +294,8 @@
         "topic": "",
         "payload": "false",
         "payloadType": "bool",
-        "x": 190,
-        "y": 560,
+        "x": 90,
+        "y": 540,
         "wires": [
             [
                 "8fcdf5c283203def"
@@ -334,8 +334,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
-        "y": 240,
+        "x": 310,
+        "y": 220,
         "wires": [
             [
                 "6953285b41498b3f",
@@ -359,7 +359,8 @@
         "y": 40,
         "wires": [
             [
-                "55aa0233e1773f02"
+                "57866eefb0835de8",
+                "32f522ab016c1ba5"
             ]
         ]
     },
@@ -395,8 +396,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 100,
+        "x": 300,
+        "y": 140,
         "wires": [
             [
                 "e32f6929f306a0bf"
@@ -415,7 +416,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
+        "x": 540,
         "y": 200,
         "wires": [
             [
@@ -435,8 +436,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
-        "y": 280,
+        "x": 300,
+        "y": 260,
         "wires": [
             [
                 "e32f6929f306a0bf"
@@ -455,8 +456,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
-        "y": 340,
+        "x": 280,
+        "y": 320,
         "wires": [
             [
                 "e32f6929f306a0bf"
@@ -467,19 +468,19 @@
         "id": "3a5e17a3fb65345a",
         "type": "function",
         "z": "74495d5772959a6b",
-        "name": "function 1",
-        "func": "let latest = flow.get(\"latestData\") || {};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = latest;\n\nreturn msg;",
+        "name": "Get History",
+        "func": "let limit = 50;\n\nif (msg.req && msg.req.query && msg.req.query.limit) {\n    limit = parseInt(msg.req.query.limit, 10) || 50;\n}\n\nmsg.topic = `\nSELECT ts, pressure, motorRun, temperature, speedRPM, alarmActive\nFROM plc_history\nORDER BY id DESC\nLIMIT ${limit};\n`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 580,
+        "x": 690,
+        "y": 680,
         "wires": [
             [
-                "02f564aa15098ff7"
+                "bad02ea9a85d3ae0"
             ]
         ]
     },
@@ -493,11 +494,11 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 800,
-        "y": 580,
+        "x": 520,
+        "y": 420,
         "wires": [
             [
-                "3a5e17a3fb65345a"
+                "12320e6e0c9ec1ee"
             ]
         ]
     },
@@ -508,8 +509,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1190,
-        "y": 580,
+        "x": 830,
+        "y": 420,
         "wires": []
     },
     {
@@ -522,8 +523,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 840,
-        "y": 660,
+        "x": 500,
+        "y": 480,
         "wires": [
             [
                 "fc99e556d4801a0e"
@@ -537,8 +538,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1190,
-        "y": 660,
+        "x": 830,
+        "y": 480,
         "wires": []
     },
     {
@@ -552,8 +553,8 @@
         "syntax": "mustache",
         "template": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>PLC Live Data</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      background: #f4f6f8;\n      padding: 20px;\n    }\n    .container {\n      max-width: 800px;\n      margin: auto;\n    }\n    h1 {\n      margin-bottom: 20px;\n    }\n    .card {\n      background: white;\n      padding: 15px;\n      margin-bottom: 12px;\n      border-radius: 10px;\n      box-shadow: 0 2px 6px rgba(0,0,0,0.08);\n    }\n    .label {\n      color: #666;\n      font-size: 14px;\n    }\n    .value {\n      font-size: 28px;\n      font-weight: bold;\n      margin-top: 5px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>PLC Live Data</h1>\n\n    <div class=\"card\">\n      <div class=\"label\">Pressure</div>\n      <div class=\"value\" id=\"pressure\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Motor Run</div>\n      <div class=\"value\" id=\"motorRun\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Temperature</div>\n      <div class=\"value\" id=\"temperature\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Speed RPM</div>\n      <div class=\"value\" id=\"speedRPM\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Alarm Active</div>\n      <div class=\"value\" id=\"alarmActive\">--</div>\n    </div>\n\n    <div class=\"card\">\n      <div class=\"label\">Timestamp</div>\n      <div class=\"value\" id=\"ts\">--</div>\n    </div>\n  </div>\n\n  <script>\n    async function loadData() {\n      try {\n        const res = await fetch('/api/latest');\n        const data = await res.json();\n\n        document.getElementById('pressure').textContent = data.pressure;\n        document.getElementById('motorRun').textContent = data.motorRun ? 'ON' : 'OFF';\n        document.getElementById('temperature').textContent = data.temperature;\n        document.getElementById('speedRPM').textContent = data.speedRPM;\n        document.getElementById('alarmActive').textContent = data.alarmActive ? 'ACTIVE' : 'NORMAL';\n        document.getElementById('ts').textContent = data.ts;\n      } catch (err) {\n        console.error(err);\n      }\n    }\n\n    loadData();\n    setInterval(loadData, 1000);\n  </script>\n</body>\n</html>",
         "output": "str",
-        "x": 1040,
-        "y": 660,
+        "x": 660,
+        "y": 480,
         "wires": [
             [
                 "202c5e3847b203da"
@@ -564,11 +565,11 @@
         "id": "0386f28650161d9d",
         "type": "sqlite",
         "z": "74495d5772959a6b",
-        "mydb": "",
+        "mydb": "13ed239583f6330c",
         "sqlquery": "msg.topic",
         "sql": "",
         "name": "plc_data.db",
-        "x": 630,
+        "x": 450,
         "y": 740,
         "wires": [
             []
@@ -578,7 +579,7 @@
         "id": "68ee8b5c7dc982f7",
         "type": "inject",
         "z": "74495d5772959a6b",
-        "name": "",
+        "name": "inject ct",
         "props": [
             {
                 "p": "payload"
@@ -590,12 +591,12 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
+        "once": true,
+        "onceDelay": "0.2",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 240,
+        "x": 100,
         "y": 740,
         "wires": [
             [
@@ -604,10 +605,161 @@
         ]
     },
     {
+        "id": "32f522ab016c1ba5",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "Insert latest into DB",
+        "func": "let d = msg.payload || {};\n\nmsg.topic = `\nINSERT INTO plc_history (ts, pressure, motorRun, temperature, speedRPM, alarmActive)\nVALUES (\n  '${d.ts || new Date().toISOString()}',\n  ${Number(d.pressure || 0)},\n  ${d.motorRun ? 1 : 0},\n  ${Number(d.temperature || 0)},\n  ${Number(d.speedRPM || 0)},\n  ${d.alarmActive ? 1 : 0}\n);\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 100,
+        "wires": [
+            [
+                "e65ca7dfc362f687"
+            ]
+        ]
+    },
+    {
+        "id": "86d5c7cc4e2f7e38",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "Reverse History",
+        "func": "msg.payload = (msg.payload || []).reverse();\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 680,
+        "wires": [
+            [
+                "7de2ca284a0af064"
+            ]
+        ]
+    },
+    {
+        "id": "5b45809b616259a8",
+        "type": "http in",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "url": "/api/control",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 520,
+        "y": 540,
+        "wires": [
+            [
+                "ad1a88417076cbb6"
+            ]
+        ]
+    },
+    {
+        "id": "ad1a88417076cbb6",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "parse control",
+        "func": "// Generic control handler for Option 3 format\n// Expects: { \"variable\": \"motorRun\", \"value\": true }\n// Routes to appropriate s7 out node based on variable name\n\nlet body = msg.payload || {};\nlet variable = body.variable;\nlet value = body.value;\n\nlet motorMsg = null;\nlet alarmMsg = null;\n\n// Map incoming variable names to their handlers\nif (variable === \"motorRun\") {\n    motorMsg = { payload: !!value };\n} else if (variable === \"alarmActive\") {\n    alarmMsg = { payload: !!value };\n}\n// TODO: Add handlers for robot_2, robot_3, belt, sensor_1, sensor_2, sensor_3\n\nlet responseMsg = {\n    headers: { \"Content-Type\": \"application/json\" },\n    payload: { ok: true, message: \"Control command sent for variable: \" + variable }\n};\n\nreturn [motorMsg, alarmMsg, responseMsg];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 540,
+        "wires": [
+            [
+                "ae87565a4ac8403f",
+                "dca27924372be8bc",
+                "938d1eb31a75ee98"
+            ]
+        ]
+    },
+    {
+        "id": "dca27924372be8bc",
+        "type": "s7 out",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "variable": "motorRun",
+        "name": "",
+        "x": 900,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "ae87565a4ac8403f",
+        "type": "s7 out",
+        "z": "74495d5772959a6b",
+        "endpoint": "abd56ab7647d1e53",
+        "variable": "alarmActive",
+        "name": "",
+        "x": 910,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "12320e6e0c9ec1ee",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "latest data",
+        "func": "let latest = flow.get(\"latestData\") || {};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = latest;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 420,
+        "wires": [
+            [
+                "02f564aa15098ff7"
+            ]
+        ]
+    },
+    {
+        "id": "b759af309dd88cb4",
+        "type": "http in",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "url": "/api/history",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 520,
+        "y": 680,
+        "wires": [
+            [
+                "3a5e17a3fb65345a"
+            ]
+        ]
+    },
+    {
+        "id": "7de2ca284a0af064",
+        "type": "http response",
+        "z": "74495d5772959a6b",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1170,
+        "y": 680,
+        "wires": []
+    },
+    {
         "id": "8fd03c862af73551",
         "type": "function",
         "z": "74495d5772959a6b",
-        "name": "function 2",
+        "name": "create table",
         "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS plc_history (\nid INTEGER PRIMARY KEY AUTOINCREMENT,\nts TEXT,\npressure REAL,\nmotorRun INTEGER,\ntemperature REAL,\nspeedRPM REAL,\nalarmActive INTEGER\n);\n`;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -615,7 +767,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 270,
         "y": 740,
         "wires": [
             [
@@ -624,27 +776,51 @@
         ]
     },
     {
-        "id": "55aa0233e1773f02",
-        "type": "http request",
+        "id": "e65ca7dfc362f687",
+        "type": "sqlite",
         "z": "74495d5772959a6b",
+        "mydb": "13ed239583f6330c",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "update db",
+        "x": 1300,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bad02ea9a85d3ae0",
+        "type": "sqlite",
+        "z": "74495d5772959a6b",
+        "mydb": "13ed239583f6330c",
+        "sqlquery": "msg.topic",
+        "sql": "",
         "name": "",
-        "method": "POST",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "http://localhost:3000/api/data",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1130,
-        "y": 40,
+        "x": 850,
+        "y": 680,
         "wires": [
             [
-                "57866eefb0835de8"
+                "86d5c7cc4e2f7e38"
             ]
+        ]
+    },
+    {
+        "id": "938d1eb31a75ee98",
+        "type": "function",
+        "z": "74495d5772959a6b",
+        "name": "control response",
+        "func": "msg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = {\n    ok: true,\n    message: \"Control command sent\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 640,
+        "wires": [
+            []
         ]
     },
     {
@@ -689,7 +865,13 @@
         ]
     },
     {
-        "id": "d509f68a289ef534",
+        "id": "13ed239583f6330c",
+        "type": "sqlitedb",
+        "db": "plc_data.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "7baa054b217afd8a",
         "type": "global-config",
         "env": [],
         "modules": {
