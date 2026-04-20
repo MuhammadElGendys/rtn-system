@@ -65,6 +65,7 @@ function generateCalendar() {
     // Update the calendar header to display month and year of the week
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'];
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     // Use the month/year from the Monday of the week (could span two months)
     document.getElementById('monthName').textContent = monthNames[weekStart.getMonth()];
@@ -90,6 +91,7 @@ function generateCalendar() {
         const dayCell = document.createElement('div');
         dayCell.className = 'day-cell';
         dayCell.textContent = dayNumber;
+        dayCell.setAttribute('data-day', dayNames[i]);
 
         // Highlight today's date with the 'today' class (red background in CSS)
         // Compares day, month, and year to determine if this is today
