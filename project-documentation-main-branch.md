@@ -59,43 +59,43 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Frontend (Browser)                        │
+│                    Frontend (Browser)                       │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │  index.html (Structure)                                 │ │
+│  │  index.html (Structure)                                │ │
 │  │  ├─ Header with Logo & Navigation Tabs                 │ │
 │  │  ├─ Calendar (Week View with Date Selection)           │ │
-│  │  ├─ Robot Cards (Real-time Status Display)            │ │
-│  │  ├─ Sensor Data Section                               │ │
-│  │  ├─ Charts Container (Live Data Visualization)        │ │
-│  │  └─ Controls & Settings                               │ │
+│  │  ├─ Robot Cards (Real-time Status Display)             │ │
+│  │  ├─ Sensor Data Section                                │ │
+│  │  ├─ Charts Container (Live Data Visualization)         │ │
+│  │  └─ Controls & Settings                                │ │
 │  │                                                        │ │
 │  │  app.js (Logic)                                        │ │
-│  │  ├─ Tab Navigation Management                         │ │
-│  │  ├─ Calendar Generation & Date Selection             │ │
-│  │  ├─ API Data Fetching                                │ │
-│  │  ├─ Real-time Data Updates                           │ │
-│  │  └─ Chart Initialization                             │ │
+│  │  ├─ Tab Navigation Management                          │ │
+│  │  ├─ Calendar Generation & Date Selection               │ │
+│  │  ├─ API Data Fetching                                  │ │
+│  │  ├─ Real-time Data Updates                             │ │
+│  │  └─ Chart Initialization                               │ │
 │  │                                                        │ │
-│  │  style.css (Styling)                                  │ │
-│  │  ├─ Dark Theme with Accent Colors                    │ │
-│  │  ├─ Responsive Grid Layouts                          │ │
-│  │  ├─ Smooth Animations & Transitions                  │ │
-│  │  └─ CSS Variables for Dynamic Theming               │ │
+│  │  style.css (Styling)                                   │ │
+│  │  ├─ Dark Theme with Accent Colors                      │ │
+│  │  ├─ Responsive Grid Layouts                            │ │
+│  │  ├─ Smooth Animations & Transitions                    │ │
+│  │  └─ CSS Variables for Dynamic Theming                  │ │
 │  └────────────────────────────────────────────────────────┘ │
-└────────────────────┬──────────────────────────────────────┬──┘
+└────────────────────┬─────────────────────────────────────┬──┘
                      │ HTTP Requests                          │
                      │ JSON Data                              │
                      ▼                                         ▼
          ┌───────────────────────┐             ┌──────────────────────┐
          │   Backend (Node.js)   │             │  Database (SQLite)   │
          ├───────────────────────┤             ├──────────────────────┤
-         │ server.js             │◄──────────►│ plc_data.db          │
-         │ ├─ Express Server     │   SQL      │ ├─ plc_history Table │
-         │ ├─ API Endpoints      │   Queries  │ └─ Data Persistence  │
+         │ server.js             │◄───────────►│ plc_data.db          │
+         │ ├─ Express Server     │   SQL       │ ├─ plc_history Table │
+         │ ├─ API Endpoints      │   Queries   │ └─ Data Persistence  │
          │ ├─ CORS Setup         │             │                      │
          │ └─ Data Management    │             └──────────────────────┘
          │                       │
-         │ Port: 3000           │
+         │ Port: 3000            │
          └───────────────────────┘
 ```
 
