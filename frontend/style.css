@@ -80,10 +80,11 @@ body {
     border-bottom-color: var(--accent);
 }
 
-/* ===== TAB CONTENT ===== */
+/* ===== TAB CONTENT ANIMATIONS ===== */
 .tab-content {
     display: none;
     padding: 30px 20px;
+    /* Fade-in animation when tab becomes active (0.3 seconds smooth transition) */
     animation: fadeIn 0.3s ease;
 }
 
@@ -91,9 +92,10 @@ body {
     display: block;
 }
 
+/* Fade-in keyframe animation: gradually increase opacity from 0 to 1 */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; }  /* Start: invisible */
+    to { opacity: 1; }    /* End: fully visible */
 }
 
 /* ===== CALENDAR SECTION ===== */
@@ -388,19 +390,21 @@ body {
     cursor: not-allowed;
 }
 
-/* ===== TOGGLE SWITCH ===== */
+/* ===== TOGGLE SWITCH (Custom Checkbox Styling) ===== */
 .toggle-switch {
     position: relative;
     display: inline-flex;
     align-items: center;
-    width: 50px;
-    height: 28px;
+    width: 50px;  /* Total width of toggle switch */
+    height: 28px; /* Total height of toggle switch */
 }
 
+/* Hide the native checkbox input, we'll use CSS to create a custom toggle */
 .toggle-switch input {
     display: none;
 }
 
+/* Create the toggle background slider using ::before pseudo-element */
 .toggle-slider {
     position: absolute;
     cursor: pointer;
@@ -408,36 +412,43 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+    /* Default unchecked state: dark gray background */
     background-color: #555;
-    border-radius: 20px;
-    transition: 0.3s;
+    border-radius: 20px; /* Fully rounded edges for pill shape */
+    transition: 0.3s;    /* Smooth color transition when toggled */
     width: 100%;
     height: 100%;
 }
 
+/* Create the circular toggle button using ::before pseudo-element */
 .toggle-slider::before {
     position: absolute;
-    content: "";
-    height: 22px;
-    width: 22px;
-    left: 3px;
-    bottom: 3px;
+    content: "";      /* Empty content for pseudo-element */
+    height: 22px;     /* Slightly smaller than container for spacing */
+    width: 22px;      /* Square size that will be rounded */
+    left: 3px;        /* Left padding inside toggle switch */
+    bottom: 3px;      /* Bottom padding inside toggle switch */
     background-color: white;
-    border-radius: 50%;
-    transition: 0.3s;
+    border-radius: 50%; /* Make it circular */
+    transition: 0.3s;   /* Smooth movement when toggled */
 }
 
+/* When checkbox is checked (via input:checked + .toggle-slider) */
 input:checked + .toggle-slider {
+    /* Change background to accent color (coral/red) when checked */
     background-color: var(--accent);
 }
 
+/* Move the circular button to the right when checked */
 input:checked + .toggle-slider::before {
+    /* Translate 22px to the right (same as button width) */
     transform: translateX(22px);
 }
 
+/* Disable styling: reduce opacity and change cursor */
 input:disabled + .toggle-slider {
     opacity: 0.5;
-    cursor: not-allowed;
+    cursor: not-allowed;  /* Show "not allowed" cursor for disabled toggles */
 }
 
 /* ===== ALARMS CONTAINER ===== */
@@ -469,32 +480,40 @@ input:disabled + .toggle-slider {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+/* Media query for tablets and mobile devices (screens 768px or smaller) */
 @media (max-width: 768px) {
+    /* Stack robot cards vertically instead of grid layout */
     .robots-section {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;  /* Single column for mobile */
     }
 
+    /* Reduce gap between navigation tabs for mobile screens */
     .nav-tabs {
         gap: 5px;
     }
 
+    /* Reduce tab button padding and font size for mobile */
     .tab-btn {
-        padding: 12px 10px;
-        font-size: 12px;
+        padding: 12px 10px;  /* Smaller padding */
+        font-size: 12px;     /* Smaller text */
     }
 
+    /* Reduce padding in tab content for mobile */
     .tab-content {
         padding: 20px 15px;
     }
 
+    /* Reduce gap in calendar header for mobile */
     .calendar-header {
         gap: 10px;
     }
 
+    /* Stack control groups vertically on mobile */
     .controls-container {
         grid-template-columns: 1fr;
     }
 
+    /* Stack chart containers vertically on mobile */
     .charts-container {
         grid-template-columns: 1fr;
     }
