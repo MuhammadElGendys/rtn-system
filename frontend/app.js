@@ -3,7 +3,7 @@
 const API_URL = "http://192.168.178.187:3000";
 
 // ===== GLOBAL STATE =====
-let currentDate = new Date(2025, 0, 1); // January 2025 from screenshots
+let currentDate = new Date(); // Today's date
 let dataHistory = []; // Store historical data for charts
 let charts = {}; // Store chart instances
 
@@ -93,16 +93,22 @@ function generateCalendar() {
         dayCell.textContent = dayNumber;
         dayCell.setAttribute('data-day', dayNames[i]);
 
-        // Highlight today's date with the 'today' class (red background in CSS)
-        // Compares day, month, and year to determine if this is today
+        // Automatically select today's date
         if (dayNumber === today.getDate() &&
             dayDate.getMonth() === today.getMonth() &&
             dayDate.getFullYear() === today.getFullYear()) {
-            dayCell.classList.add('today');
+            dayCell.classList.add('selected');
         }
 
-        // Add click listener to log selected date (can be extended for date selection)
+        // Add click listener to select the day
         dayCell.addEventListener('click', () => {
+            // Remove selected class from all day cells
+            const allDays = daysGrid.querySelectorAll('.day-cell');
+            allDays.forEach(day => day.classList.remove('selected'));
+
+            // Add selected class to clicked day
+            dayCell.classList.add('selected');
+
             console.log(`Selected: ${monthNames[dayDate.getMonth()]} ${dayNumber}, ${dayDate.getFullYear()}`);
         });
 

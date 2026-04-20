@@ -8,9 +8,9 @@
 :root {
     --dark-bg: #1a1a1a;
     --darker-bg: #0f0f0f;
-    --card-bg: #2a2a2a;
-    --accent: #ff6b5b;
-    --accent-hover: #ff5544;
+    --card-bg: rgba(154, 154, 154, 0.14);
+    --accent: #FA4D4D;
+    --accent-hover: #FA4D4D;
     --text-primary: #ffffff;
     --text-secondary: #b0b0b0;
     --border: #3a3a3a;
@@ -18,7 +18,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--dark-bg);
     color: var(--text-primary);
     padding: 0;
@@ -28,17 +28,40 @@ body {
 
 /* ===== HEADER ===== */
 .header {
-    background: var(--darker-bg);
-    padding: 20px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
+    /* background: var(--darker-bg);
+    border-bottom: 1px solid var(--border); */
+    width: 100%;
+}
+
+.header-content {
+    padding: 15px 20px;
+    padding-left: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    position: absolute;
+    left: 20px;
 }
 
 .logo {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
     color: var(--accent);
-    letter-spacing: 4px;
+    letter-spacing: 2px;
+    min-width: fit-content;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
 }
 
 /* ===== CONTAINER ===== */
@@ -50,40 +73,44 @@ body {
 /* ===== NAVIGATION TABS ===== */
 .nav-tabs {
     display: flex;
-    gap: 0;
-    background: var(--darker-bg);
-    border-bottom: 2px solid var(--border);
-    padding: 0 20px;
+    gap: 8px;
+    background: transparent;
+    border-bottom: none;
+    padding: 0;
     overflow-x: auto;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
 }
 
 .tab-btn {
-    flex: 1;
-    padding: 15px 20px;
-    background: none;
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    background: transparent;
     border: none;
     color: var(--text-secondary);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    border-bottom: 3px solid transparent;
+    border-radius: 20px;
     transition: all 0.3s ease;
     white-space: nowrap;
 }
 
 .tab-btn:hover {
-    color: var(--accent);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .tab-btn.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
+    color: var(--text-primary);
+    background: var(--accent);
 }
 
 /* ===== TAB CONTENT ANIMATIONS ===== */
 .tab-content {
     display: none;
-    padding: 30px 20px;
+    padding: 0px 20px 30px 20px;
     /* Fade-in animation when tab becomes active (0.3 seconds smooth transition) */
     animation: fadeIn 0.3s ease;
 }
@@ -114,9 +141,16 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     gap: 30px;
     flex-wrap: wrap;
+}
+
+.calendar-dates-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
 .calendar-nav {
@@ -143,7 +177,6 @@ body {
     font-weight: 600;
     color: var(--text-primary);
     text-align: center;
-    font-family: 'Inter', sans-serif;
     letter-spacing: 0px;
 }
 
@@ -179,16 +212,16 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
     transition: all 0.2s;
     min-width: auto;
     height: auto;
     background: transparent;
     border: none;
-    padding: 0;
+    padding: 4px 8px;
     font-size: 30px;
     color: var(--text-primary);
     font-weight: 600;
+    border-radius: 8px;
 }
 
 .day-cell::before {
@@ -210,21 +243,12 @@ body {
     display: none;
 }
 
-.day-cell.today {
+.day-cell.selected {
     background: var(--accent);
     color: white;
-    font-weight: 600;
-    width: 60px;
-    height: 80px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
 }
 
-.day-cell.today::before {
+.day-cell.selected::before {
     color: white;
 }
 
