@@ -7,3 +7,8 @@
 ## Back-End:
 
 - Fix all send values to the main node-red connection.
+
+## NOTES:
+- the pressure value has been changed to voltage, it's the value used currently in the back-end, to be updated in node-red side.
+- alarms are currently a place-holder for the tia-portal alarms/errors that's gonna be sent via put-get/node-red and db.
+- all other robots variables has the following name structure: variableName_2 for second robot, variableName_3 for the third robot
