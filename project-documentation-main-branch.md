@@ -16,7 +16,7 @@
 
 ## Project Overview
 
-**Project Name:** TRN System (Truck Robot Network Dashboard)
+**Project Name:** TRN System (TiaPortal RobotStudio Node-red)
 
 **Purpose:** A real-time monitoring dashboard for industrial robotic systems. This system tracks PLC (Programmable Logic Controller) data from industrial robots and displays it in an intuitive, modern web interface.
 
