@@ -1,6 +1,7 @@
 # TRN System - Project Documentation
 
 ## Table of Contents
+
 1. [Project Overview](#project-overview)
 2. [Technology Stack](#technology-stack)
 3. [Architecture](#architecture)
@@ -21,6 +22,7 @@
 **Purpose:** A real-time monitoring dashboard for industrial robotic systems. This system tracks PLC (Programmable Logic Controller) data from industrial robots and displays it in an intuitive, modern web interface.
 
 **Main Goals:**
+
 - Display real-time motor/sensor data
 - Track historical data over time
 - Provide a user-friendly interface for monitoring multiple robotic systems
@@ -31,12 +33,14 @@
 ## Technology Stack
 
 ### Frontend
+
 - **HTML5** - Semantic markup and structure
 - **CSS3** - Modern styling with CSS variables for theming
 - **Vanilla JavaScript (ES6+)** - No frameworks, lightweight and fast
 - **SVG** - Vector graphics for logos and robot icons
 
 ### Backend
+
 - **Node.js** - JavaScript runtime for server-side code
 - **Express.js** - Lightweight web framework
 - **SQLite3** - Lightweight database
@@ -45,13 +49,13 @@
 
 ### Why These Choices?
 
-| Technology | Why Used |
-|-----------|----------|
+| Technology                    | Why Used                                                                                           |
+| ----------------------------- | -------------------------------------------------------------------------------------------------- |
 | **Vanilla JS (No React/Vue)** | Lightweight, no build process needed, direct DOM manipulation, faster learning curve, full control |
-| **Express.js** | Minimal, fast, perfect for simple REST APIs, large community, easy to extend |
-| **SQLite3** | Lightweight, file-based, no server setup needed, sufficient for development/testing |
-| **CSS Variables** | Dynamic theming, consistent color management, easier maintenance |
-| **SVG Icons** | Scalable, sharp on all devices, customizable with CSS, smaller than raster images |
+| **Express.js**                | Minimal, fast, perfect for simple REST APIs, large community, easy to extend                       |
+| **SQLite3**                   | Lightweight, file-based, no server setup needed, sufficient for development/testing                |
+| **CSS Variables**             | Dynamic theming, consistent color management, easier maintenance                                   |
+| **SVG Icons**                 | Scalable, sharp on all devices, customizable with CSS, smaller than raster images                  |
 
 ---
 
@@ -107,26 +111,60 @@
 rtn-system/
 │
 ├── frontend/
-│   ├── index.html          # Main HTML structure
-│   ├── app.js              # JavaScript logic and API calls
-│   ├── style.css           # Styling and theming
-│   ├── logo.svg            # TRN Logo (scalable vector)
-│   └── robot-arm.svg       # Robot icon (scalable vector)
+│   ├── index.html                    # Main HTML structure & layout
+│   ├── css/
+│   │   └── style.css                # Centralized styling with CSS variables
+│   ├── js/
+│   │   ├── app.js                   # Main orchestrator & initialization
+│   │   ├── api.js                   # API client for backend communication
+│   │   ├── liveData.js              # ChartManager: charts & data history
+│   │   ├── calendar.js              # Calendar: week view & date selection
+│   │   ├── controls.js              # ControlPanel: toggles & commands
+│   │   └── ui.js                    # UIManager: tabs & display updates
+│   ├── img/
+│   │   └── logo.svg                 # TRN Logo (scalable vector)
+│   └── app.js.old                   # Backup of original monolithic app.js
 │
 ├── backend/
-│   ├── server.js           # Express server & API endpoints
-│   ├── package.json        # Dependencies
+│   ├── server.js                    # Express server & API endpoints
+│   ├── package.json                 # Dependencies
 │   └── database/
-│       └── db.js           # SQLite database setup
+│       └── db.js                    # SQLite database setup
 │
 ├── nodered/
-│   └── flows.json          # Node-RED workflow (data ingestion)
+│   └── flows.json                   # Node-RED workflow (data ingestion)
 │
 ├── project-organization/
 │   └── project-organization-notes.md
 │
-├── readme.md               # Project overview
-└── fixs-list.md            # Known issues & fixes
+├── readme.md                        # Project overview & setup guide
+└── fixs-list.md                     # Known issues & fixes
+```
+
+**Architecture Overview:**
+
+```
+┌─────────────────────────────────────────────────────┐
+│           Frontend - Modular Architecture           │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  index.html (Structure)                             │
+│         ↓                                           │
+│  css/style.css (Styling)                            │
+│         ↓                                           │
+│  js/ (Logic - Modular Classes)                      │
+│  ├─ ApiClient (Backend communication)               │
+│  ├─ ChartManager (Data visualization)               │
+│  ├─ Calendar (Date selection)                       │
+│  ├─ ControlPanel (Command handling)                 │
+│  ├─ UIManager (Tab management & display)            │
+│  └─ App (Main orchestrator)                         │
+│         ↓                                           │
+│  Backend API (/api/latest, /api/control)            │
+│         ↓                                           │
+│  Node-RED (PLC communication)                       │
+│                                                     │
+└─────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -142,18 +180,18 @@ rtn-system/
 ```html
 <!-- Header with Logo and Navigation -->
 <header class="header">
-    <div class="header-content">
-        <div class="logo-section">
-            <img src="logo.svg" alt="TRN Logo" class="logo-img">
-        </div>
-        <nav class="nav-tabs">
-            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-            <button class="tab-btn" data-tab="live-data">Live Data</button>
-            <button class="tab-btn" data-tab="control">Control</button>
-            <button class="tab-btn" data-tab="alarms">Alarms</button>
-            <button class="tab-btn" data-tab="settings">Settings</button>
-        </nav>
+  <div class="header-content">
+    <div class="logo-section">
+      <img src="img/logo.svg" alt="TRN Logo" class="logo-img" />
     </div>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="live-data">Live Data</button>
+      <button class="tab-btn" data-tab="control">Control</button>
+      <button class="tab-btn" data-tab="alarms">Alarms</button>
+      <button class="tab-btn" data-tab="settings">Settings</button>
+    </nav>
+  </div>
 </header>
 ```
 
@@ -161,7 +199,7 @@ rtn-system/
 
 ---
 
-### 2. CSS Styling (style.css)
+### 2. CSS Styling (css/style.css)
 
 **What it does:** Provides a modern dark theme with responsive design.
 
@@ -170,154 +208,224 @@ rtn-system/
 ```css
 /* CSS Variables for Dynamic Theming */
 :root {
-    --dark-bg: #1a1a1a;           /* Main background */
-    --darker-bg: #0f0f0f;         /* Header background */
-    --card-bg: rgba(154, 154, 154, 0.14); /* Card with 14% transparency */
-    --accent: #FA4D4D;            /* Highlight color (red) */
-    --text-primary: #ffffff;      /* Main text */
-    --text-secondary: #b0b0b0;    /* Secondary text */
-    --border: #3a3a3a;            /* Border color */
+  --dark-bg: #1a1a1a; /* Main background */
+  --darker-bg: #0f0f0f; /* Header background */
+  --card-bg: rgba(154, 154, 154, 0.14); /* Card with 14% transparency */
+  --accent: #fa4d4d; /* Highlight color (red) */
+  --text-primary: #ffffff; /* Main text */
+  --text-secondary: #b0b0b0; /* Secondary text */
+  --border: #3a3a3a; /* Border color */
 }
 ```
 
 **Why CSS Variables?**
+
 - Easy theme switching by changing one value
 - Consistent color scheme across entire app
 - Reduced code duplication
 - Easy to maintain
 
 **Example Usage:**
+
 ```css
 body {
-    background: var(--dark-bg);
-    color: var(--text-primary);
+  background: var(--dark-bg);
+  color: var(--text-primary);
 }
 
 .robot-card {
-    background: var(--card-bg);
-    border: 2px solid var(--border);
+  background: var(--card-bg);
+  border: 2px solid var(--border);
 }
 ```
 
 **Responsive Design:**
+
 ```css
 /* Mobile-first approach with media queries */
 @media (max-width: 768px) {
-    .robots-section {
-        grid-template-columns: 1fr;  /* Single column on mobile */
-    }
-    
-    .tab-btn {
-        font-size: 12px;            /* Smaller text on mobile */
-        padding: 12px 10px;         /* Adjusted padding */
-    }
+  .robots-section {
+    grid-template-columns: 1fr; /* Single column on mobile */
+  }
+
+  .tab-btn {
+    font-size: 12px; /* Smaller text on mobile */
+    padding: 12px 10px; /* Adjusted padding */
+  }
 }
 ```
 
 ---
 
-### 3. JavaScript Logic (app.js)
+### 3. JavaScript Modules (js/)
 
-**What it does:** Handles user interactions, data fetching, and dynamic content rendering.
+**What it does:** Provides modular, maintainable code with clear separation of concerns.
 
-**Key Functions:**
+**Architecture Overview:**
 
-#### A. Calendar Management
+The JavaScript codebase is split into 6 focused modules, each with a specific responsibility:
+
+#### A. API Client (js/api.js)
+
 ```javascript
-let currentDate = new Date(); // Today's date
+class ApiClient {
+  constructor(apiUrl) {
+    this.apiUrl = apiUrl;
+  }
 
-function generateCalendar() {
-    // Find Monday of current week
-    const dayOfWeek = currentDate.getDay();
-    const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    
-    const weekStart = new Date(currentDate);
-    weekStart.setDate(weekStart.getDate() - daysToMonday);
-    
-    // Generate 7 day cells
-    for (let i = 0; i < 7; i++) {
-        const dayDate = new Date(weekStart);
-        dayDate.setDate(weekStart.getDate() + i);
-        
-        const dayCell = document.createElement('div');
-        dayCell.className = 'day-cell';
-        dayCell.textContent = dayDate.getDate();
-        
-        // Auto-select today's date
-        if (isSameDay(dayDate, new Date())) {
-            dayCell.classList.add('selected');
-        }
-        
-        // Click to select different dates
-        dayCell.addEventListener('click', () => {
-            document.querySelectorAll('.day-cell').forEach(d => 
-                d.classList.remove('selected')
-            );
-            dayCell.classList.add('selected');
-        });
-        
-        daysGrid.appendChild(dayCell);
-    }
+  async fetchLatest() {
+    // Fetch latest data from /api/latest endpoint
+  }
+
+  async sendControl(variable, value) {
+    // Send control command to /api/control endpoint
+  }
 }
 ```
 
-**Why:** Provides intuitive date selection for viewing historical data.
+**Responsibility:** Handle all backend communication  
+**Why:** Centralized API logic makes it easy to change endpoints or error handling
 
-#### B. Tab Navigation
+#### B. Chart Manager (js/liveData.js)
+
 ```javascript
-function initTabs() {
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Remove active class from all
-            tabButtons.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(tc => tc.classList.remove('active'));
-            
-            // Add to clicked
-            btn.classList.add('active');
-            const tabName = btn.dataset.tab;
-            document.getElementById(tabName).classList.add('active');
-            
-            // Lazy load charts only when needed
-            if (tabName === 'live-data') {
-                initCharts();
-            }
-        });
-    });
+class ChartManager {
+  constructor() {
+    this.dataHistory = []; // Keep last 50 data points
+    this.charts = {}; // Store Chart.js instances
+  }
+
+  addDataPoint(data) {
+    // Add new data to history
+  }
+
+  initCharts() {
+    // Initialize Chart.js instances
+  }
+
+  updateCharts() {
+    // Update existing charts with new data
+  }
 }
 ```
 
-**Why:** Reduces initial load time by lazy-loading charts.
+**Responsibility:** Manage all chart creation, updates, and data history  
+**Why:** Isolated chart logic makes debugging and testing easier
 
-#### C. API Integration
+#### C. Calendar Module (js/calendar.js)
+
 ```javascript
-const API_URL = "http://192.168.178.187:3000";
+class Calendar {
+  constructor() {
+    this.currentDate = new Date();
+  }
 
-async function fetchRobotData() {
-    try {
-        const response = await fetch(`${API_URL}/api/latest`);
-        const data = await response.json();
-        
-        // Update robot status cards
-        document.getElementById('motor1-status').textContent = 
-            data.motorRun ? "RUNNING" : "STOPPED";
-        document.getElementById('motor1-temp').textContent = 
-            data.temperature?.toFixed(1) || "--";
-        document.getElementById('motor1-rpm').textContent = 
-            data.speedRPM?.toFixed(0) || "--";
-            
-    } catch (error) {
-        console.error('Failed to fetch data:', error);
-    }
+  generateCalendar() {
+    // Generate week view
+  }
+
+  previousWeek() {
+    // Navigate to previous week
+  }
+
+  nextWeek() {
+    // Navigate to next week
+  }
 }
-
-// Poll for updates every 2 seconds
-setInterval(fetchRobotData, 2000);
 ```
 
-**Why:** Real-time monitoring of system status without page refresh.
+**Responsibility:** Handle calendar generation and date navigation  
+**Why:** Reusable component that can be extended for different views
+
+#### D. Control Panel (js/controls.js)
+
+```javascript
+class ControlPanel {
+  constructor(apiClient) {
+    this.apiClient = apiClient;
+  }
+
+  initToggles() {
+    // Setup event listeners for all control toggles
+  }
+
+  handleToggle(variable, value) {
+    // Send control command to backend
+  }
+}
+```
+
+**Responsibility:** Manage user interactions with control elements  
+**Why:** Separation between UI interactions and API logic
+
+#### E. UI Manager (js/ui.js)
+
+```javascript
+class UIManager {
+  constructor(chartManager) {
+    this.chartManager = chartManager;
+  }
+
+  initTabs() {
+    // Setup tab switching with lazy chart loading
+  }
+
+  updateDisplay(data) {
+    // Update all display elements with latest data
+  }
+}
+```
+
+**Responsibility:** Handle tab switching and DOM updates  
+**Why:** Keeps presentation logic separate from business logic
+
+#### F. Main App (js/app.js)
+
+```javascript
+class App {
+  constructor(apiUrl = "http://192.168.178.187:3000") {
+    this.apiClient = new ApiClient(apiUrl);
+    this.chartManager = new ChartManager();
+    this.calendar = new Calendar();
+    this.ui = new UIManager(this.chartManager);
+    this.controls = new ControlPanel(this.apiClient);
+  }
+
+  async init() {
+    // Initialize all modules
+    // Setup event listeners
+    // Start data polling
+  }
+
+  startPolling() {
+    // Fetch new data every 1 second
+  }
+}
+```
+
+**Responsibility:** Orchestrate all modules and manage initialization  
+**Why:** Clear entry point and dependency management
+
+**Why Modular Architecture?**
+
+- ✅ Single Responsibility: Each class handles one domain
+- ✅ Testable: Can unit test each module independently
+- ✅ Reusable: Modules can be used in other projects
+- ✅ Scalable: Easy to add new features
+- ✅ Maintainable: Bug fixes are localized to specific modules
+
+**Script Loading Order:**
+
+```html
+<script src="js/api.js"></script>
+<script src="js/liveData.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/controls.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+```
+
+**Why this order?** Modules are loaded before they're used, avoiding undefined reference errors.
 
 ---
 
@@ -328,6 +436,7 @@ setInterval(fetchRobotData, 2000);
 **What it does:** Creates REST API endpoints for data management.
 
 **Configuration:**
+
 ```javascript
 const express = require("express");
 const cors = require("cors");
@@ -337,8 +446,8 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
-app.use(cors());  // Allow cross-origin requests
-app.use(express.json());  // Parse JSON bodies
+app.use(cors()); // Allow cross-origin requests
+app.use(express.json()); // Parse JSON bodies
 
 let latestData = null;
 ```
@@ -350,49 +459,52 @@ let latestData = null;
 ### 2. API Endpoints
 
 #### Endpoint 1: Health Check
+
 ```javascript
 app.get("/", (req, res) => {
-    res.send("PLC Backend Server Running");
+  res.send("PLC Backend Server Running");
 });
 
 // Usage: http://localhost:3000/
 ```
 
 #### Endpoint 2: Receive Data from PLC
+
 ```javascript
 app.post("/api/data", (req, res) => {
-    latestData = req.body;
-    
-    const { ts, pressure, motorRun, temperature, speedRPM, alarmActive } = latestData;
-    
-    // Store in database
-    db.run(
-        `INSERT INTO plc_history 
+  latestData = req.body;
+
+  const { ts, pressure, motorRun, temperature, speedRPM, alarmActive } =
+    latestData;
+
+  // Store in database
+  db.run(
+    `INSERT INTO plc_history 
          (ts, pressure, motorRun, temperature, speedRPM, alarmActive)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [
-            ts || new Date().toISOString(),
-            pressure ?? null,
-            motorRun ? 1 : 0,
-            temperature ?? null,
-            speedRPM ?? null,
-            alarmActive ? 1 : 0
-        ],
-        function (err) {
-            if (err) {
-                return res.status(500).json({
-                    status: "error",
-                    message: "Database insert failed"
-                });
-            }
-            
-            res.json({
-                status: "ok",
-                message: "Data received and stored",
-                id: this.lastID
-            });
-        }
-    );
+    [
+      ts || new Date().toISOString(),
+      pressure ?? null,
+      motorRun ? 1 : 0,
+      temperature ?? null,
+      speedRPM ?? null,
+      alarmActive ? 1 : 0,
+    ],
+    function (err) {
+      if (err) {
+        return res.status(500).json({
+          status: "error",
+          message: "Database insert failed",
+        });
+      }
+
+      res.json({
+        status: "ok",
+        message: "Data received and stored",
+        id: this.lastID,
+      });
+    },
+  );
 });
 
 // Usage (from PLC/Node-RED):
@@ -408,9 +520,10 @@ app.post("/api/data", (req, res) => {
 ```
 
 #### Endpoint 3: Get Latest Data
+
 ```javascript
 app.get("/api/latest", (req, res) => {
-    res.json(latestData || {});
+  res.json(latestData || {});
 });
 
 // Usage: http://localhost:3000/api/latest
@@ -418,23 +531,24 @@ app.get("/api/latest", (req, res) => {
 ```
 
 #### Endpoint 4: Get Historical Data
+
 ```javascript
 app.get("/api/history", (req, res) => {
-    const limit = parseInt(req.query.limit) || 20;
-    
-    db.all(
-        `SELECT * FROM plc_history ORDER BY id DESC LIMIT ?`,
-        [limit],
-        (err, rows) => {
-            if (err) {
-                return res.status(500).json({
-                    status: "error",
-                    message: err.message
-                });
-            }
-            res.json(rows);
-        }
-    );
+  const limit = parseInt(req.query.limit) || 20;
+
+  db.all(
+    `SELECT * FROM plc_history ORDER BY id DESC LIMIT ?`,
+    [limit],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({
+          status: "error",
+          message: err.message,
+        });
+      }
+      res.json(rows);
+    },
+  );
 });
 
 // Usage: http://localhost:3000/api/history?limit=50
@@ -456,16 +570,16 @@ const path = require("path");
 const dbPath = path.join(__dirname, "plc_data.db");
 
 const db = new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-        console.error("Error opening database:", err.message);
-    } else {
-        console.log("Connected to SQLite database.");
-    }
+  if (err) {
+    console.error("Error opening database:", err.message);
+  } else {
+    console.log("Connected to SQLite database.");
+  }
 });
 
 // Create table if not exists
 db.serialize(() => {
-    db.run(`
+  db.run(`
         CREATE TABLE IF NOT EXISTS plc_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             ts TEXT,
@@ -483,17 +597,18 @@ module.exports = db;
 
 **Table Structure:**
 
-| Column | Type | Purpose |
-|--------|------|---------|
-| id | INTEGER PRIMARY KEY | Unique record identifier |
-| ts | TEXT | Timestamp (ISO format) |
-| pressure | REAL | Pressure sensor reading |
-| motorRun | INTEGER | Motor on/off (1/0) |
-| temperature | REAL | Temperature sensor reading |
-| speedRPM | REAL | Motor speed in RPM |
-| alarmActive | INTEGER | Alarm status (1/0) |
+| Column      | Type                | Purpose                    |
+| ----------- | ------------------- | -------------------------- |
+| id          | INTEGER PRIMARY KEY | Unique record identifier   |
+| ts          | TEXT                | Timestamp (ISO format)     |
+| pressure    | REAL                | Pressure sensor reading    |
+| motorRun    | INTEGER             | Motor on/off (1/0)         |
+| temperature | REAL                | Temperature sensor reading |
+| speedRPM    | REAL                | Motor speed in RPM         |
+| alarmActive | INTEGER             | Alarm status (1/0)         |
 
 **Why SQLite?**
+
 - No server setup required
 - File-based storage
 - Perfect for development/testing
@@ -505,16 +620,19 @@ module.exports = db;
 ## Features & Functionality
 
 ### 1. Real-time Dashboard
+
 - **What:** Displays current robot status in live cards
 - **How:** Fetches from `/api/latest` every 2 seconds
 - **Shows:** Motor status, temperature, RPM, pressure, alarms
 
 ### 2. Week Calendar with Date Selection
+
 - **What:** Interactive 7-day calendar
 - **How:** Shows current week, highlights today by default
 - **Why:** Easy navigation between dates for historical data
 
 ### 3. Tab-based Navigation
+
 - **Dashboard:** Main overview with cards
 - **Live Data:** Real-time charts and graphs
 - **Control:** Manual control interface
@@ -522,11 +640,13 @@ module.exports = db;
 - **Settings:** Configuration options
 
 ### 4. Responsive Design
+
 - **Desktop:** Full grid layout with multiple columns
 - **Tablet:** Adjusted spacing and font sizes
 - **Mobile:** Single column layout, larger touch targets
 
 ### 5. Modern Dark Theme
+
 - **Colors:** Dark background with red accents
 - **Psychology:** Reduces eye strain, professional appearance
 - **Customizable:** CSS variables allow easy theme changes
@@ -536,34 +656,40 @@ module.exports = db;
 ## How to Run
 
 ### Prerequisites
+
 - Node.js (v14 or higher)
 - npm (comes with Node.js)
 
 ### Backend Setup
 
 1. Navigate to backend directory:
+
 ```bash
 cd backend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 This installs:
+
 - **express**: Web framework
 - **cors**: Cross-Origin Resource Sharing
 - **sqlite3**: Database
 - **axios**: HTTP client
 
 3. Start the server:
+
 ```bash
 npm start
 # or: node server.js
 ```
 
 Output:
+
 ```
 Connected to SQLite database.
 Server running on port 3000
@@ -572,11 +698,13 @@ Server running on port 3000
 ### Frontend Setup
 
 1. Navigate to frontend directory:
+
 ```bash
 cd frontend
 ```
 
 2. Start a local server (for testing):
+
 ```bash
 # Using Python
 python -m http.server 5000
@@ -586,6 +714,7 @@ npx http-server -p 5000
 ```
 
 3. Open in browser:
+
 ```
 http://localhost:5000
 ```
@@ -593,28 +722,32 @@ http://localhost:5000
 ### Verify Connection
 
 1. Backend health check:
+
 ```
 http://localhost:3000/
 ```
+
 Expected: "PLC Backend Server Running"
 
 2. API test:
+
 ```
 http://localhost:3000/api/latest
 ```
+
 Expected: JSON response (empty if no data sent yet)
 
 ---
 
 ## API Endpoints Summary
 
-| Method | Endpoint | Purpose | Parameters |
-|--------|----------|---------|-----------|
-| GET | `/` | Health check | None |
-| GET | `/api/test` | API test | None |
-| POST | `/api/data` | Receive PLC data | JSON body with sensor data |
-| GET | `/api/latest` | Get latest reading | None |
-| GET | `/api/history` | Get historical data | `limit` (default: 20) |
+| Method | Endpoint       | Purpose             | Parameters                 |
+| ------ | -------------- | ------------------- | -------------------------- |
+| GET    | `/`            | Health check        | None                       |
+| GET    | `/api/test`    | API test            | None                       |
+| POST   | `/api/data`    | Receive PLC data    | JSON body with sensor data |
+| GET    | `/api/latest`  | Get latest reading  | None                       |
+| GET    | `/api/history` | Get historical data | `limit` (default: 20)      |
 
 ---
 
@@ -659,30 +792,38 @@ User Dashboard
 ## Customization Guide
 
 ### Change Backend Port
+
 In `server.js`:
+
 ```javascript
-const PORT = 3000;  // Change to desired port
+const PORT = 3000; // Change to desired port
 ```
 
 ### Change Theme Colors
+
 In `style.css`:
+
 ```css
 :root {
-    --accent: #FA4D4D;        /* Change from red */
-    --dark-bg: #1a1a1a;       /* Change background */
-    --text-primary: #ffffff;  /* Change text color */
+  --accent: #fa4d4d; /* Change from red */
+  --dark-bg: #1a1a1a; /* Change background */
+  --text-primary: #ffffff; /* Change text color */
 }
 ```
 
 ### Change API Update Frequency
+
 In `app.js`:
+
 ```javascript
 // Change from 2000ms (2 seconds) to desired interval
 setInterval(fetchRobotData, 2000);
 ```
 
 ### Change Calendar Date Range
+
 In `app.js`:
+
 ```javascript
 // Modify to show month instead of week
 // Current: 7 days (Monday-Sunday)
@@ -694,6 +835,7 @@ In `app.js`:
 ## Known Issues & Future Improvements
 
 ### Current Limitations
+
 1. Single robot system (can be extended to multiple)
 2. Basic data visualization (no charts yet)
 3. No user authentication
@@ -701,6 +843,7 @@ In `app.js`:
 5. Limited mobile optimization
 
 ### Future Enhancements
+
 1. Multi-robot support with system selection
 2. Advanced charts (Chart.js, D3.js)
 3. User login and role-based access
@@ -715,18 +858,23 @@ In `app.js`:
 ## Troubleshooting
 
 ### Issue: "Cannot GET /"
+
 **Solution:** Backend server not running. Run `npm start` in backend folder.
 
 ### Issue: Frontend can't connect to backend
+
 **Solution:** Check API_URL in `app.js`. Should match backend IP and port.
+
 ```javascript
-const API_URL = "http://192.168.178.187:3000";  // Update IP address
+const API_URL = "http://192.168.178.187:3000"; // Update IP address
 ```
 
 ### Issue: Database insert errors
+
 **Solution:** Check column names and data types match schema in `db.js`.
 
 ### Issue: CORS errors
+
 **Solution:** Ensure `cors()` middleware is initialized in server.js before routes.
 
 ---
