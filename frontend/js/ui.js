@@ -45,18 +45,67 @@ class UIManager {
    * Called every time new data is fetched from backend
    * 
    * Data Mapping (Backend to Frontend):
-   * - pressure → voltage (sensor display)
-   * - temperature → Loading robot temperature display
-   * - speedRPM → Belt velocity / Loading robot velocity display
-   * - motorRun → Loading robot status (Working/Idle)
-   * - alarmActive → Alarm status display (ACTIVE/NORMAL)
+   * - motorRun → Status circle color (green if running, red if idle) + Val1
+   * - temperature → Val2
+   * - speedRPM → Val3
+   * - pressure → Val4
    * 
    * @param {Object} data - Latest data from API
    */
   updateDisplay(data) {
     if (!data) return;
 
-    // Update ROBOT 1: Loading display with received data
+    // ===== UPDATE STATUS CIRCLE =====
+    // Update the status circle color based on motorRun status
+    const statusCircle = document.getElementById('statusCircle');
+    const statusText = document.getElementById('statusText');
+
+    if (statusCircle) {
+      if (data.motorRun) {
+        // System is running: green circle
+        statusCircle.classList.remove('inactive');
+        if (statusText) statusText.textContent = 'System Running';
+      } else {
+        // System is idle/stopped: red circle
+        statusCircle.classList.add('inactive');
+        if (statusText) statusText.textContent = 'System Stopped';
+      }
+    }
+
+    // ===== UPDATE PLACEHOLDER VALUES =====
+    // Val1: Motor Run Status (1 = running, 0 = stopped)
+    // Get the Val1 element from DOM and update it with motorRun status
+    const val1 = document.getElementById('val1');
+    if (val1) {
+      // Display "1" if motor is running, "0" if stopped
+      val1.textContent = data.motorRun ? '1' : '0';
+    }
+
+    // Val2: Temperature
+    // Get the Val2 element from DOM and update it with temperature value from backend
+    const val2 = document.getElementById('val2');
+    if (val2) {
+      // Display temperature or "--" if data is not available
+      val2.textContent = data.temperature ?? '--';
+    }
+
+    // Val3: Speed/RPM
+    // Get the Val3 element from DOM and update it with speed/RPM value from backend
+    const val3 = document.getElementById('val3');
+    if (val3) {
+      // Display speedRPM or "--" if data is not available
+      val3.textContent = data.speedRPM ?? '--';
+    }
+
+    // Val4: Pressure/Voltage
+    // Get the Val4 element from DOM and update it with pressure/voltage value from backend
+    const val4 = document.getElementById('val4');
+    if (val4) {
+      // Display pressure or "--" if data is not available
+      val4.textContent = data.pressure ?? '--';
+    }
+
+    // ===== LEGACY: Update ROBOT 1: Loading display with received data =====
     // motorRun boolean is converted to readable status text (Working or Idle)
     const motor1Status = document.getElementById('motor1-status');
     if (motor1Status) {

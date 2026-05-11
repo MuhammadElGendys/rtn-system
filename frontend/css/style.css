@@ -511,18 +511,87 @@ input:disabled + .toggle-slider {
     font-size: 16px;
 }
 
-/* ===== SETTINGS CONTAINER ===== */
-.settings-container {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 30px;
-    text-align: center;
+/* ===== VISUALIZATION SECTION (Main Dashboard) ===== */
+.visualization-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 60px 20px;
+    min-height: 70vh;
 }
 
-.settings-placeholder {
+.status-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.status-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #4CAF50;  /* Default green for system running */
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Red status when system is not running */
+.status-circle.inactive {
+    background-color: #f44336;  /* Red */
+    box-shadow: 0 0 30px rgba(244, 67, 54, 0.5);
+}
+
+.status-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.values-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.value-box {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.value-box:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(250, 77, 77, 0.2);
+}
+
+.value-label {
+    font-size: 14px;
     color: var(--text-secondary);
-    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+}
+
+.value-display {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--accent);
+    font-family: 'Courier New', monospace;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
