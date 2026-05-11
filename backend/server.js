@@ -143,12 +143,14 @@ app.get("/api/history", (req, res) => {
 // Control endpoint to send commands to Node-RED
 // Receives control commands from frontend with format: { variable: "motorRun", value: true }
 // Forwards to Node-RED for S7 PLC communication
+const NODE_RED_URL = "http://192.168.178.187:1880/api/control";
+// IMPORTANT: Update NODE_RED_URL above to match your Node-RED server address and port
+// See CONFIG_INSTRUCTIONS.md for details on finding your IP address
 app.post("/api/control", async (req, res) => {
     try {
-        // Change this URL to match your Node-RED server address and port
-        // Format: http://NODE_RED_HOST:NODE_RED_PORT/api/control
+        // Send control command to Node-RED (configure NODE_RED_URL above)
         const response = await axios.post(
-            "http://192.168.178.187:1880/api/control",
+            NODE_RED_URL,
             req.body
         );
 

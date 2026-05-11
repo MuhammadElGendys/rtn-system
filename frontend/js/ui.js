@@ -105,51 +105,6 @@ class UIManager {
       val4.textContent = data.pressure ?? '--';
     }
 
-    // ===== LEGACY: Update ROBOT 1: Loading display with received data =====
-    // motorRun boolean is converted to readable status text (Working or Idle)
-    const motor1Status = document.getElementById('motor1-status');
-    if (motor1Status) {
-      motor1Status.textContent = data.motorRun ? 'Working' : 'Idle';
-    }
-
-    // temperature value from backend is displayed directly
-    // Use ?? operator to show "--" if temperature is null/undefined
-    const motor1Temp = document.getElementById('motor1-temp');
-    if (motor1Temp) {
-      motor1Temp.textContent = data.temperature ?? '--';
-    }
-
-    // speedRPM value is displayed as belt velocity
-    const motor1RPM = document.getElementById('motor1-rpm');
-    if (motor1RPM) {
-      motor1RPM.textContent = data.speedRPM ?? '--';
-    }
-
-    // Update SENSORS section with received data
-    // pressure is renamed to voltage in Node-RED but still comes as 'pressure' field
-    const voltage = document.getElementById('voltage');
-    if (voltage) {
-      voltage.textContent = (data.pressure || '--') + ' V';
-    }
-
-    // TODO: Ampere - currently not transmitted from backend/Node-RED
-    const ampere = document.getElementById('ampere');
-    if (ampere) {
-      ampere.textContent = '-- A';
-    }
-
-    // Belt velocity = speedRPM (same value as robot velocity)
-    const beltVelocity = document.getElementById('belt-velocity');
-    if (beltVelocity) {
-      beltVelocity.textContent = (data.speedRPM || '--') + ' RPM';
-    }
-
-    // TODO: Carton presence - currently not transmitted from backend/Node-RED
-    const carton = document.getElementById('carton');
-    if (carton) {
-      carton.textContent = '--';
-    }
-
     // TODO: Alarm status - placeholder for TIA-Portal alarms integration
     const alarmStatus = document.getElementById('alarmStatus');
     if (alarmStatus) {

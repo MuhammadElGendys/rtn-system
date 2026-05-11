@@ -3,7 +3,7 @@
  * Orchestrates all components and manages initialization and data polling
  */
 class App {
-  constructor(apiUrl = "http://192.168.178.187:3000") {
+  constructor(apiUrl = CONFIG.BACKEND_URL) {
     // Initialize all modules
     this.apiClient = new ApiClient(apiUrl);
     this.chartManager = new ChartManager();
