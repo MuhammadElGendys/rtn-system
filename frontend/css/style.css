@@ -533,15 +533,15 @@ input:disabled + .toggle-slider {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    background-color: #4CAF50;  /* Default green for system running */
-    box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+    background-color: #f44336;  /* Default red when system is not running */
+    box-shadow: 0 0 30px rgba(244, 67, 54, 0.5);
     transition: all 0.3s ease;
 }
 
-/* Red status when system is not running */
-.status-circle.inactive {
-    background-color: #f44336;  /* Red */
-    box-shadow: 0 0 30px rgba(244, 67, 54, 0.5);
+/* Green status when system is running */
+.status-circle.active {
+    background-color: #4CAF50;  /* Green */
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
 }
 
 .status-text {

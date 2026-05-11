@@ -56,18 +56,18 @@ class UIManager {
     if (!data) return;
 
     // ===== UPDATE STATUS CIRCLE =====
-    // Update the status circle color based on motorRun status
+    // Update the status circle color based on motorRun status from database
     const statusCircle = document.getElementById('statusCircle');
     const statusText = document.getElementById('statusText');
 
     if (statusCircle) {
       if (data.motorRun) {
-        // System is running: green circle
-        statusCircle.classList.remove('inactive');
+        // System is running: add active class to show green circle
+        statusCircle.classList.add('active');
         if (statusText) statusText.textContent = 'System Running';
       } else {
-        // System is idle/stopped: red circle
-        statusCircle.classList.add('inactive');
+        // System is not running: remove active class to show red circle (default)
+        statusCircle.classList.remove('active');
         if (statusText) statusText.textContent = 'System Stopped';
       }
     }
